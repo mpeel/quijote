@@ -1,3 +1,5 @@
+# Code to cross-compare the MFI and WMAP beams
+# Mike Peel, 27 May 2019
 import numpy as np
 import healpy as hp
 import matplotlib.pyplot as plt
