@@ -51,7 +51,9 @@ combine_q = np.zeros(npix)
 combine_u = np.zeros(npix)
 weight_q = np.zeros(npix)
 weight_u = np.zeros(npix)
+rescale_vals = np.zeros((3,nummaps))
 for i in range(2,nummaps):
+	print(maps[i])
 	mapdata = hp.read_map(indirectory+maps[i],field=None)
 	commonmask[mapdata[0][:] == hp.UNSEEN] = 0
 	mapdata[0][mapdata[0][:] == hp.UNSEEN] = 0.0
@@ -95,25 +97,28 @@ for i in range(2,nummaps):
 		diff_i[diff_i > 1e4] = 0.0
 		diff_q[diff_q > 1e4] = 0.0
 		diff_u[diff_u > 1e4] = 0.0
-		print(np.std(diff_i[diff_i != 0.0]))
-		print(np.std(diff_q[diff_q != 0.0]))
-		print(np.std(diff_u[diff_u != 0.0]))
+		# print(np.std(diff_i[diff_i != 0.0]))
+		# print(np.std(diff_q[diff_q != 0.0]))
+		# print(np.std(diff_u[diff_u != 0.0]))
 		var_i = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_0_variance'),field=None)
 		var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
 		var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
 		var_i[var_i < -1e4] = 0.0
 		var_q[var_q < -1e4] = 0.0
 		var_u[var_u < -1e4] = 0.0
-		print(np.max(var_i))
-		print(np.min(var_i))
+		# print(np.max(var_i))
+		# print(np.min(var_i))
 		noise_i = noiserealisation(np.sqrt(var_i[var_i != 0.0]),len(var_i[var_i != 0.0]))
 		noise_q = noiserealisation(np.sqrt(var_q[var_q != 0.0]),len(var_q[var_q != 0.0]))
 		noise_u = noiserealisation(np.sqrt(var_u[var_u != 0.0]),len(var_u[var_u != 0.0]))
-		print(np.std(noise_i[noise_i != 0.0]))
-		print(np.std(noise_q[noise_q != 0.0]))
-		print(np.std(noise_u[noise_u != 0.0]))
+		# print(np.std(noise_i[noise_i != 0.0]))
+		# print(np.std(noise_q[noise_q != 0.0]))
+		# print(np.std(noise_u[noise_u != 0.0]))
 
-		print(np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0]))
+		rescale_vals[0,i] = np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0])
+		rescale_vals[1,i] = np.std(diff_q[diff_q != 0.0])/np.std(noise_q[noise_q != 0.0])
+		rescale_vals[2,i] = np.std(diff_u[diff_u != 0.0])/np.std(noise_u[noise_u != 0.0])
+
 
 		var_i[:] = var_i[:] * np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0])
 		var_q[:] = var_q[:] * np.std(diff_q[diff_q != 0.0])/np.std(noise_q[noise_q != 0.0])
@@ -129,18 +134,18 @@ for i in range(2,nummaps):
 	plt.savefig(outdirectory+maps[i]+'_1_var.pdf')
 	hp.mollview(var_u,norm='hist')
 	plt.savefig(outdirectory+maps[i]+'_2_var.pdf')
-	print(maps[i])
-	print(np.median(np.sqrt(var_i[var_i[:] >=0])))
-	print(np.median(np.sqrt(var_q[var_q[:] >=0])))
-	print(np.median(np.sqrt(var_u[var_u[:] >=0])))
+	# print(maps[i])
+	# print(np.median(np.sqrt(var_i[var_i[:] >=0])))
+	# print(np.median(np.sqrt(var_q[var_q[:] >=0])))
+	# print(np.median(np.sqrt(var_u[var_u[:] >=0])))
 
 	var_i = var_i * ((normfreq/freqs[i])**index)**2
 	var_q = var_q * ((normfreq/freqs[i])**index)**2
 	var_u = var_u * ((normfreq/freqs[i])**index)**2
 
-	print(np.median(np.sqrt(var_i[var_i[:] >=0])))
-	print(np.median(np.sqrt(var_q[var_q[:] >=0])))
-	print(np.median(np.sqrt(var_u[var_u[:] >=0])))
+	# print(np.median(np.sqrt(var_i[var_i[:] >=0])))
+	# print(np.median(np.sqrt(var_q[var_q[:] >=0])))
+	# print(np.median(np.sqrt(var_u[var_u[:] >=0])))
 
 
 	if i != 0 and i != 1:
@@ -185,3 +190,6 @@ hp.mollview(mapdata*1000.0*commonmask2,min=0,max=0.03,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+'combine_P_planck.pdf')
 hp.mollview(mapdata*1000.0,min=0,max=0.06,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+'combine_P_planck_nomask.pdf')
+
+np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
+print(rescale_vals)
