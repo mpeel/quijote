@@ -35,6 +35,12 @@ prefix = ['mfi_mar2018_30_2','mfi_mar2018_35_6','mfi_mar2018_40_2','mfi_mar2018_
 outdir = '/Users/mpeel/Documents/maps/quijote_201803/reform/'
 
 
+quijote_map = ['/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_oofnoise_may2019_sims_sky_dipole_oofnoise_nside512_finalmaskfdec.fits','/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_whitenoise_may2019_sims_sky_dipole_whitenoise_nside512_finalmaskfdec.fits']
+prefix = ['mfi_sim2019oof','mfi_sim2019white']
+outdir = '/Users/mpeel/Documents/maps/quijote_2019_sim/reform/'
+types = ['map','nhits','weights']
+#types = ['map','weights','nhits']
+
 print(len(quijote_map))
 print(len(prefix))
 for mapnum in range(0,len(quijote_map)):
@@ -48,6 +54,7 @@ for mapnum in range(0,len(quijote_map)):
 	print(col_names)
 	nmaps = len(col_names)
 	maps = []
+	# exit()
 	# print(inputfits[1].data)
 	# print(inputfits[1].data[0][0])
 

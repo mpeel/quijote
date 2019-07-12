@@ -41,6 +41,7 @@ maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits
 use_halfrings = False
 use_weights = False
 use_reweight_by_rms = True
+use_reweight_by_rms_method = 2 # 1 = ricardo, 2 = alberto
 
 nummaps = len(maps)
 freqs = [11,13,17,19,11,13,17,19]
@@ -91,9 +92,9 @@ for i in range(2,nummaps):
 	elif use_reweight_by_rms:
 		map_half1 = hp.read_map(indirectory+maps_half1[i],field=None)
 		map_half2 = hp.read_map(indirectory+maps_half2[i],field=None)
-		diff_i = (np.abs(map_half1[0] - map_half2[0])/2.0)**2
-		diff_q = (np.abs(map_half1[1] - map_half2[1])/2.0)**2
-		diff_u = (np.abs(map_half1[2] - map_half2[2])/2.0)**2
+		diff_i = (np.abs(map_half1[0] - map_half2[0])/2.0)#**2
+		diff_q = (np.abs(map_half1[1] - map_half2[1])/2.0)#**2
+		diff_u = (np.abs(map_half1[2] - map_half2[2])/2.0)#**2
 		diff_i[diff_i > 1e4] = 0.0
 		diff_q[diff_q > 1e4] = 0.0
 		diff_u[diff_u > 1e4] = 0.0
@@ -108,21 +109,22 @@ for i in range(2,nummaps):
 		var_u[var_u < -1e4] = 0.0
 		# print(np.max(var_i))
 		# print(np.min(var_i))
-		noise_i = noiserealisation(np.sqrt(var_i[var_i != 0.0]),len(var_i[var_i != 0.0]))
-		noise_q = noiserealisation(np.sqrt(var_q[var_q != 0.0]),len(var_q[var_q != 0.0]))
-		noise_u = noiserealisation(np.sqrt(var_u[var_u != 0.0]),len(var_u[var_u != 0.0]))
-		# print(np.std(noise_i[noise_i != 0.0]))
-		# print(np.std(noise_q[noise_q != 0.0]))
-		# print(np.std(noise_u[noise_u != 0.0]))
 
-		rescale_vals[0,i] = np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0])
-		rescale_vals[1,i] = np.std(diff_q[diff_q != 0.0])/np.std(noise_q[noise_q != 0.0])
-		rescale_vals[2,i] = np.std(diff_u[diff_u != 0.0])/np.std(noise_u[noise_u != 0.0])
+		if use_reweight_by_rms_method == 1:
+			noise_i = noiserealisation(np.sqrt(var_i[var_i != 0.0]),len(var_i[var_i != 0.0]))
+			noise_q = noiserealisation(np.sqrt(var_q[var_q != 0.0]),len(var_q[var_q != 0.0]))
+			noise_u = noiserealisation(np.sqrt(var_u[var_u != 0.0]),len(var_u[var_u != 0.0]))
+			rescale_vals[0,i] = np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0])
+			rescale_vals[1,i] = np.std(diff_q[diff_q != 0.0])/np.std(noise_q[noise_q != 0.0])
+			rescale_vals[2,i] = np.std(diff_u[diff_u != 0.0])/np.std(noise_u[noise_u != 0.0])
+		else:
+			rescale_vals[0,i] = np.std(diff_i[var_i != 0.0] / np.sqrt(var_i[var_i != 0.0]))
+			rescale_vals[1,i] = np.std(diff_q[var_q != 0.0] / np.sqrt(var_q[var_q != 0.0]))
+			rescale_vals[2,i] = np.std(diff_u[var_u != 0.0] / np.sqrt(var_u[var_u != 0.0]))
 
-
-		var_i[:] = var_i[:] * np.std(diff_i[diff_i != 0.0])/np.std(noise_i[noise_i != 0.0])
-		var_q[:] = var_q[:] * np.std(diff_q[diff_q != 0.0])/np.std(noise_q[noise_q != 0.0])
-		var_u[:] = var_u[:] * np.std(diff_u[diff_u != 0.0])/np.std(noise_u[noise_u != 0.0])
+		var_i[:] = var_i[:] * (rescale_vals[0,i])**2.0
+		var_q[:] = var_q[:] * (rescale_vals[1,i])**2.0
+		var_u[:] = var_u[:] * (rescale_vals[2,i])**2.0
 		var_i[var_i == 0.0] = 1e4
 		var_q[var_q == 0.0] = 1e4
 		var_u[var_u == 0.0] = 1e4
