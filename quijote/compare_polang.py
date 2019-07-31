@@ -54,7 +54,7 @@ def calc_polang_unc(Q, U, Qerr, Uerr):
 	unc_map[~np.isfinite(unc_map)] = 1000.0
 	return unc_map
 
-def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq=False):
+def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq=False,freq1=0,freq2=0,xlabel='',ylabel='',xyline=False):
 	# print(sigma)
 	# Do a fit
 	params = [1.0,0]
@@ -93,10 +93,21 @@ def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq
 			param_est[0], sigma_param_est[0]) + ','
 		r'$B={:5.3e}\pm{:3.2e}$'.format(
 			param_est[1], sigma_param_est[1]))# + ','
+		if freq1 != freq2:
+			beta = -np.log(param_est[0])/np.log(freq1/freq2)
+			s_beta = sigma_param_est[0]/param_est[0] / np.abs(np.log(freq1/freq2))
+			mesg_fit = mesg_fit + ', beta = ${:5.3f}\pm{:3.2f}$'.format(beta,s_beta)
+			print(beta,s_beta)
 		plt.plot(xvals,linfit(xvals,param_est),'g',label="Fit: " + mesg_fit)
 	else:
 		plt.plot(xvals,linfit(xvals,param_est),'g')
+	if xyline:
+		plt.plot(vals1,vals1,label='X=Y')
 	plt.legend(prop={'size':8})
+	if xlabel != '':
+		plt.xlabel(xlabel)
+	if ylabel != '':
+		plt.ylabel(ylabel)
 	plt.savefig(outputname)
 	plt.clf()
 	return [param_est, sigma_param_est]
