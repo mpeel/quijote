@@ -11,7 +11,7 @@
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
-
+import matplotlib.colors as colors
 def noiserealisation(inputmap, numpixels):
     newmap = np.zeros(numpixels)
     newmap = np.random.normal(scale=1.0, size=numpixels) * inputmap
@@ -42,11 +42,62 @@ use_halfrings = False
 use_weights = False
 use_reweight_by_rms = True
 use_reweight_by_rms_method = 2 # 1 = ricardo, 2 = alberto
+index = -2.15
+# index = -3.0
+
+planckmap = hp.read_map('/Users/mpeel/Documents/maps/wmap_planck_pol/weighted_both_debwk_feb2015_tqu.fits',field=None)
+# planckmap = hp.pixelfunc.reorder(planckmap[0],n2r=True)
+planckmap = hp.ud_grade(planckmap[0],nside,order_in='NEST',order_out='RING')
+
+planck_iqu = hp.read_map('/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits',field=None)
+# planckmap = hp.pixelfunc.reorder(planckmap[0],n2r=True)
+planck_iqu = hp.ud_grade(planck_iqu,nside,order_in='RING',order_out='RING')
+
+# cbass = hp.read_map('/Users/mpeel/Documents/maps/cbass2019/512_60.00smoothed_cbass_4.76_512_mKCMBunits.fits',field=None)
+cbass = hp.read_map('/Users/mpeel/Documents/maps/cbass2019/cbass_global8p8deg_swapQU_NIGHT_v28allelsNs_37_noiseCut_masked5pc_G_1024_ol500_lessTol_g_map_g_1deg_0256.fits',field=None)
+# planckmap = hp.pixelfunc.reorder(planckmap[0],n2r=True)
+cbass = hp.ud_grade(cbass,nside,order_in='RING',order_out='RING')
+newmask = np.ones(npix)
+newmask[cbass[0] < -100.0] = 0
+hp.mollview(cbass[1]*1e3*((28.4/4.76)**index)*newmask,min=-0.05,max=0.05, title='CBASS Q')
+plt.savefig(outdirectory+'cbassq.png')
+hp.mollview(cbass[2]*1e3*((28.4/4.76)**index)*newmask,min=-0.05,max=0.05,title='CBASS U')
+plt.savefig(outdirectory+'cbassu.png')
+hp.mollview(planck_iqu[1]*newmask,min=-0.05,max=0.05,title='Planck Q')
+plt.savefig(outdirectory+'planckq.png')
+hp.mollview(planck_iqu[2]*newmask,min=-0.05,max=0.05, title='Planck U')
+plt.savefig(outdirectory+'plancku.png')
+print(max(planck_iqu[1]))
+print(max(cbass[1]))
+print(max(cbass[1])*(28.4/4.76)**index)
+cbass = cbass * 1e3
+# Output a comparison between C-BASS and the Planck data
+hp.mollview(((np.sqrt(cbass[1]**2+cbass[2]**2)*(28.4/4.76)**index)-1000.0*planckmap)*newmask,min=-0.05,max=0.05,title='CBASS - (Planck+WMAP)')
+plt.savefig(outdirectory+'cbass_diff_to_planckwmap.png')
+hp.mollview((1000.0*planckmap-(np.sqrt(cbass[1]**2+cbass[2]**2)*(28.4/4.76)**index))*newmask,min=-0.05,max=0.05)
+plt.savefig(outdirectory+'cbass_diff_to_planckwmap_inverse.pdf')
+
+hp.mollview(((np.sqrt(cbass[1]**2+cbass[2]**2)*(28.4/4.76)**index))*newmask,min=0,max=0.05,title='CBASS P')
+plt.savefig(outdirectory+'cbass_P.png')
+hp.mollview((np.sqrt(planck_iqu[1]**2+planck_iqu[2]**2))*newmask,min=0,max=0.05,title='Planck P')
+plt.savefig(outdirectory+'planck_P.png')
+
+hp.mollview(((np.sqrt(cbass[1]**2+cbass[2]**2)*(28.4/4.76)**index)-np.sqrt(planck_iqu[1]**2+planck_iqu[2]**2))*newmask,min=-0.03,max=0.03,title='CBASS - Planck')
+plt.savefig(outdirectory+'cbass_diff_to_planck.png')
+
+hp.mollview((np.sqrt((cbass[1]*(28.4/4.76)**index - planck_iqu[1])**2+(cbass[2]*(28.4/4.76)**index - planck_iqu[2])**2))*newmask,max=0.05,title='CBASS - Planck via sqrt((QCB-QPlanck)**2 + (UCB-UPlanck)**2)')#,norm=colors.PowerNorm(gamma=0.2))
+plt.savefig(outdirectory+'cbass_diff_to_planckQU.png')
+hp.mollview((cbass[1]*(28.4/4.76)**index - planck_iqu[1])*newmask,min=-0.05,max=0.05,title='CBASS Q - Planck Q')
+plt.savefig(outdirectory+'cbass_diff_to_planckQ.png')
+
+hp.mollview((cbass[2]*(28.4/4.76)**index - planck_iqu[2])*newmask,min=-0.05,max=0.05,title='CBASS U - Planck U')
+plt.savefig(outdirectory+'cbass_diff_to_planckU.png')
+
+# exit()
 
 nummaps = len(maps)
 freqs = [11,13,17,19,11,13,17,19]
 normfreq = 10.0
-index = -3.0
 commonmask = np.ones(npix)
 combine_q = np.zeros(npix)
 combine_u = np.zeros(npix)
@@ -149,6 +200,38 @@ for i in range(2,nummaps):
 	# print(np.median(np.sqrt(var_q[var_q[:] >=0])))
 	# print(np.median(np.sqrt(var_u[var_u[:] >=0])))
 
+	# Output a comparison with the Planck data
+	hp.mollview(((np.sqrt(mapdata[1]**2+mapdata[2]**2)*(28.4/freqs[i])**index)-1000.0*planckmap)*commonmask,min=-0.1,max=0.1,title=maps[i] + ' - (Planck+WMAP)')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckwmap.png')
+	hp.mollview((1000.0*planckmap-(np.sqrt(mapdata[1]**2+mapdata[2]**2)*(28.4/freqs[i])**index))*commonmask,min=-0.1,max=0.1)
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckwmap_inverse.pdf')
+
+	hp.mollview((np.sqrt((mapdata[1]*(28.4/freqs[i])**index)**2+(mapdata[2]*(28.4/freqs[i])**index)**2)-np.sqrt(planck_iqu[1]**2+planck_iqu[2]**2))*commonmask,min=-0.05,max=0.05,title=maps[i] + ' P - Planck P')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckP.png')
+	hp.mollview(np.sqrt((mapdata[1]*(28.4/freqs[i])**index - planck_iqu[1])**2+(mapdata[2]*(28.4/freqs[i])**index - planck_iqu[2])**2)*commonmask,min=0,max=0.1,title=maps[i] + ' - Planck via sqrt((QMFI-QPlanck)**2 + (UMFI-UPlanck)**2)')#,norm=colors.PowerNorm(gamma=0.2))
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckQU.png')
+	hp.mollview((mapdata[1]*(28.4/freqs[i])**index - planck_iqu[1])*commonmask,min=-0.05,max=0.05,title=maps[i] + ' Q - Planck Q')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckQ.png')
+
+	hp.mollview((mapdata[2]*(28.4/freqs[i])**index - planck_iqu[2])*commonmask,min=-0.05,max=0.05,title=maps[i] + ' U - Planck U')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckU.png')
+
+	hp.gnomview(((mapdata[0]*(28.4/freqs[i])**index))*commonmask,title=maps[i] + ' I (rescaled to 28.4)',rot=[80,0],max=10.0,reso=10.0)
+	plt.savefig(outdirectory+maps[i]+'_I_cyg.png')
+	hp.gnomview(((mapdata[0]*(28.4/freqs[i])**index)-planck_iqu[0])*commonmask,min=-2.0,max=2.0,title=maps[i] + ' I - Planck I',rot=[80,0],reso=10.0)
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckI_cyg.png')
+	hp.gnomview((np.sqrt((mapdata[1]*(28.4/freqs[i])**index)**2+(mapdata[2]*(28.4/freqs[i])**index)**2)-np.sqrt(planck_iqu[1]**2+planck_iqu[2]**2))*commonmask,min=-0.05,max=0.05,rot=[80,0],reso=10.0,title=maps[i] + ' P - Planck P')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckP_cyg.png')
+	hp.gnomview(np.sqrt((mapdata[1]*(28.4/freqs[i])**index - planck_iqu[1])**2+(mapdata[2]*(28.4/freqs[i])**index - planck_iqu[2])**2)*commonmask,min=0,max=0.1,rot=[80,0],reso=10.0,title=maps[i] + ' - Planck via sqrt((QMFI-QPlanck)**2 + (UMFI-UPlanck)**2)')#,norm=colors.PowerNorm(gamma=0.2))
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckQU_cyg.png')
+	hp.gnomview((mapdata[1]*(28.4/freqs[i])**index - planck_iqu[1])*commonmask,min=-0.1,max=0.1,rot=[80,0],reso=10.0,title=maps[i] + ' Q - Planck Q')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckQ_cyg.png')
+
+	hp.gnomview((mapdata[2]*(28.4/freqs[i])**index - planck_iqu[2])*commonmask,min=-0.1,max=0.1,rot=[80,0],reso=10.0,title=maps[i] + ' U - Planck U')
+	plt.savefig(outdirectory+maps[i]+'diff_to_planckU_cyg.png')
+	# exit()
+
+
 
 	if i != 0 and i != 1:
 		if i == 2:
@@ -183,15 +266,14 @@ hp.write_map(outdirectory+prefix+'_combine_P_nomask.fits',np.sqrt(combine_q**2+c
 hp.mollview(np.sqrt(combine_q**2+combine_u**2),min=0,max=1.2,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+prefix+'_combine_P_nomask.pdf')
 
-mapdata = hp.read_map('/Users/mpeel/Documents/maps/wmap_planck_pol/weighted_both_debwk_feb2015_tqu.fits',field=None)
-mapdata = hp.pixelfunc.reorder(mapdata[0],n2r=True)
 
-commonmask2 = hp.ud_grade(commonmask,256,order_in='RING',order_out='RING')
+# commonmask2 = hp.ud_grade(commonmask,256,order_in='RING',order_out='RING')
 
-hp.mollview(mapdata*1000.0*commonmask2,min=0,max=0.03,cmap=plt.get_cmap('jet'))
+hp.mollview(planckmap*1000.0*commonmask,min=0,max=0.03,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+'combine_P_planck.pdf')
-hp.mollview(mapdata*1000.0,min=0,max=0.06,cmap=plt.get_cmap('jet'))
+hp.mollview(planckmap*1000.0,min=0,max=0.06,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+'combine_P_planck_nomask.pdf')
 
 np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
 print(rescale_vals)
+
