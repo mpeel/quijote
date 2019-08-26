@@ -9,16 +9,25 @@ output_nside = [512]#, 256, 128, 64]
 # directory = '/Users/mpeel/Documents/maps/quijote_201905/reform/'
 # outdirectory = '/Users/mpeel/Documents/maps/quijote_201905/smooth/'
 
-directory = '/net/nas/proyectos/quijote/mikepeel/quijote_201905/reform/'
-outdirectory = '/net/nas/proyectos/quijote/mikepeel/quijote_201905/smooth/'
 
 #mfi_l,mfi_111,mfi_113,mfi_217,mfi_219,mfi_311,mfi_313,mfi_417,mfi_419 = np.loadtxt('/Users/mpeel/Documents/QUIJOTE/MFI/quijote_mfi_wfs.dat',unpack=True)
 
 mfi_l,mfi_111,mfi_113,mfi_217,mfi_219,mfi_311,mfi_313,mfi_417,mfi_419 = np.loadtxt('/net/nas/proyectos/quijote/mikepeel/quijote_mfi_wfs.dat',unpack=True)
 
-prefixes = ['mfi_may2019','mfi_may2019_half1','mfi_may2019_half2']
+
+# July 2019 release
+directory = '/net/nas/proyectos/quijote/mikepeel/quijote_201907/reform/'
+outdirectory = '/net/nas/proyectos/quijote/mikepeel/quijote_201907/smooth/'
+prefixes = ['mfi_jul2019','mfi_jul2019_half1','mfi_jul2019_half2']
 newprefixes = ['mfi','half1mfi','half2mfi']
-newdate = '201905'
+newdate = '201907'
+
+# May 2019 release
+# directory = '/net/nas/proyectos/quijote/mikepeel/quijote_201905/reform/'
+# outdirectory = '/net/nas/proyectos/quijote/mikepeel/quijote_201905/smooth/'
+# prefixes = ['mfi_may2019','mfi_may2019_half1','mfi_may2019_half2']
+# newprefixes = ['mfi','half1mfi','half2mfi']
+# newdate = '201905'
 numrealisations=1000
 
 mapnumbers = [0,1,2]

@@ -17,29 +17,37 @@ from astrocode.fitspectrum.astroutils import *
 # quijote_map = ['/Users/mpeel/Documents/maps/quijote_201905/quijote_combinedmaps_select_test_rfi_final_may2019_final_test_rfi_final_nside512_finalmaskfdec.fits','/Users/mpeel/Documents/maps/quijote_201905/quijote_combinedmaps_select_test_rfi_final_half1_may2019_final_test_rfi_final_nside512_finalmaskfdec.fits','/Users/mpeel/Documents/maps/quijote_201905/quijote_combinedmaps_select_test_rfi_final_half2_may2019_final_test_rfi_final_nside512_finalmaskfdec.fits']
 # outdir = '/Users/mpeel/Documents/maps/quijote_201905/reform/'
 # prefix = ['mfi_may2019', 'mfi_may2019_half1', 'mfi_may2019_half2']
-types = ['map','nhits','weights']
+# types = ['map','nhits','weights']
 invert_weights = True
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_201810/quijote_combinedmaps_select_oct2018_test_rfi_alldata_highfk_nside512.fits']
-outdir = '/Users/mpeel/Documents/maps/quijote_201810/reform/'
-prefix = ['mfi_oct2018']
-types = ['map','mapsmth','nhits','weights']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_201810/quijote_combinedmaps_select_oct2018_test_rfi_alldata_highfk_nside512.fits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_201810/reform/'
+# prefix = ['mfi_oct2018']
+# types = ['map','mapsmth','nhits','weights']
 
 # quijote_map = ['/Users/mpeel/Documents/maps/quijote_201904/NOMINAL30_period2_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL35_period6_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL40_period2_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL40_period5_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL50_period2_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL50_period5_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL50_period6_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL60_period1_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL60_period2_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL60_period5_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL60_period6_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL65_period1_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL65_period2_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL65_period6_apr2019_sky2_nomask_perperiod_nside512_packed.fits','/Users/mpeel/Documents/maps/quijote_201904/NOMINAL70_period6_apr2019_sky2_nomask_perperiod_nside512_packed.fits']
 # prefix = ['mfi_apr2019_30_2','mfi_apr2019_35_6','mfi_apr2019_40_2','mfi_apr2019_40_5','mfi_apr2019_50_2','mfi_apr2019_50_5','mfi_apr2019_50_6','mfi_apr2019_60_1','mfi_apr2019_60_2','mfi_apr2019_60_5','mfi_apr2019_60_6','mfi_apr2019_65_1','mfi_apr2019_65_2','mfi_apr2019_65_6','mfi_apr2019_70_6']
-types = ['pixels','map','weights','nhits']
-outdir = '/Users/mpeel/Documents/maps/quijote_201904/reform/'
+# types = ['pixels','map','weights','nhits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_201904/reform/'
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_201803/NOMINAL30_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL35_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL40_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL40_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period1_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period1_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL70_period6_mar2018_test_rfi_packed.fits']
-prefix = ['mfi_mar2018_30_2','mfi_mar2018_35_6','mfi_mar2018_40_2','mfi_mar2018_40_5','mfi_mar2018_50_2','mfi_mar2018_50_5','mfi_mar2018_50_6','mfi_mar2018_60_1','mfi_mar2018_60_2','mfi_mar2018_60_5','mfi_mar2018_60_6','mfi_mar2018_65_1','mfi_mar2018_65_2','mfi_mar2018_65_6','mfi_mar2018_70_6']
-outdir = '/Users/mpeel/Documents/maps/quijote_201803/reform/'
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_201803/NOMINAL30_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL35_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL40_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL40_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL50_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period1_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period5_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL60_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period1_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period2_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL65_period6_mar2018_test_rfi_packed.fits','/Users/mpeel/Documents/maps/quijote_201803/NOMINAL70_period6_mar2018_test_rfi_packed.fits']
+# prefix = ['mfi_mar2018_30_2','mfi_mar2018_35_6','mfi_mar2018_40_2','mfi_mar2018_40_5','mfi_mar2018_50_2','mfi_mar2018_50_5','mfi_mar2018_50_6','mfi_mar2018_60_1','mfi_mar2018_60_2','mfi_mar2018_60_5','mfi_mar2018_60_6','mfi_mar2018_65_1','mfi_mar2018_65_2','mfi_mar2018_65_6','mfi_mar2018_70_6']
+# outdir = '/Users/mpeel/Documents/maps/quijote_201803/reform/'
 
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_oofnoise_may2019_sims_sky_dipole_oofnoise_nside512_finalmaskfdec.fits','/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_whitenoise_may2019_sims_sky_dipole_whitenoise_nside512_finalmaskfdec.fits']
-prefix = ['mfi_sim2019oof','mfi_sim2019white']
-outdir = '/Users/mpeel/Documents/maps/quijote_2019_sim/reform/'
-types = ['map','nhits','weights']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_oofnoise_may2019_sims_sky_dipole_oofnoise_nside512_finalmaskfdec.fits','/Users/mpeel/Documents/maps/quijote_2019_sim/quijote_combinedmaps_select_sims_sky_dipole_whitenoise_may2019_sims_sky_dipole_whitenoise_nside512_finalmaskfdec.fits']
+# prefix = ['mfi_sim2019oof','mfi_sim2019white']
+# outdir = '/Users/mpeel/Documents/maps/quijote_2019_sim/reform/'
+# types = ['map','nhits','weights']
 #types = ['map','weights','nhits']
+
+
+quijote_map = ['/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half1_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half2_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits']
+outdir = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
+prefix = ['mfi_jul2019', 'mfi_jul2019_half1', 'mfi_jul2019_half2']
+types = ['map','mapsmth','nhits','weights']
+# scale = [[1.0, 1.0, 1.0, 1.0],[1.0, 1.0, 1.0, 1.0]]
+scale = [[1.0, 0.91, 0.88, 0.96], [1.0, 0.88, 0.88, 0.92]]
 
 print(len(quijote_map))
 print(len(prefix))
@@ -95,7 +103,8 @@ for mapnum in range(0,len(quijote_map)):
 		for i in range(1,count_types): # map/nhits/weights
 			for k in range(0,2): # Low/high band
 				for l in range(0,4): # Horns
-					maps[0][pixelnumbers[:]] = data[i][0][0][k][l][:]
+					print(scale[k][l])
+					maps[0][pixelnumbers[:]] = data[i][0][0][k][l][:] / scale[k][l]
 					maps[1][pixelnumbers[:]] = data[i][0][1][k][l][:]
 					maps[2][pixelnumbers[:]] = data[i][0][2][k][l][:]
 
@@ -119,6 +128,11 @@ for mapnum in range(0,len(quijote_map)):
 		for i in range(0,count_types): # map/nhits/weights
 			for k in range(0,2): # Low/high band
 				for l in range(0,4): # Horns
+					outname = prefix[mapnum]+'_'+types[i]+'_'+str(freqs[k][l])+'_'+str(l+1)+'.fits'
+					print(outname)
+					if types[i] in ['map','mapsmth']:
+						print('Rescaling by ' + str(scale[k][l]))
+						data[i][0][k][l][:] /= scale[k][l]
 					if types[i] == 'weights' and invert_weights:
 						# Invert the weights map
 						data[i][0][k][l][data[1][0][k][l]!=0]	= 1.0 / data[i][0][k][l][data[1][0][k][l]!=0]
@@ -130,7 +144,6 @@ for mapnum in range(0,len(quijote_map)):
 					data[i][2][k][l][data[1][0][k][l]==0] = hp.pixelfunc.UNSEEN
 					outmap = [data[i][0][k][l], data[i][1][k][l], data[i][2][k][l]]
 					print(np.shape(outmap))
-					outname = prefix[mapnum]+'_'+types[i]+'_'+str(freqs[k][l])+'_'+str(l+1)+'.fits'
 					hp.write_map(outdir+outname,outmap,overwrite=True)
 					hp.mollview(outmap[0],norm='hist')
 					plt.savefig(outdir+outname+'_I.pdf')

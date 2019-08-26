@@ -17,8 +17,11 @@ from astropy import units as u
 nside = 512
 npix = hp.nside2npix(nside)
 
-indirectory = '/Users/mpeel/Documents/maps/quijote_2019_sim/reform/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_2019_sim/analyse/'
+# indirectory = '/Users/mpeel/Documents/maps/quijote_2019_sim/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_2019_sim/analyse/'
+# date='201905'
+indirectory = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/analyse/'
 date='201905'
 
 # Create a map that is the declination for given Galactic pixels
@@ -35,7 +38,8 @@ declinationmap_int = declinationmap.astype(int)
 mapends = ['_map_13.0_1.fits','_map_13.0_3.fits','_map_17.0_2.fits','_map_17.0_4.fits','_map_19.0_2.fits','_map_19.0_4.fits','_map_11.0_1.fits','_map_11.0_3.fits']
 # prefixes = ['mfi_may2019']
 # prefixes = ['mfi_apr2019_30_2','mfi_apr2019_35_6','mfi_apr2019_40_2','mfi_apr2019_40_5','mfi_apr2019_50_2','mfi_apr2019_50_5','mfi_apr2019_50_6','mfi_apr2019_60_1','mfi_apr2019_60_2','mfi_apr2019_60_5','mfi_apr2019_60_6','mfi_apr2019_65_1','mfi_apr2019_65_2','mfi_apr2019_65_6','mfi_apr2019_70_6']
-prefixes = ['mfi_sim2019oof','mfi_sim2019white']
+# prefixes = ['mfi_sim2019oof','mfi_sim2019white']
+prefixes = ['mfi_jul2019', 'mfi_jul2019_half1', 'mfi_jul2019_half2']
 maps = []
 for prefix in prefixes:
 	for end in mapends:
