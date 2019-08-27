@@ -238,7 +238,7 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 	offset_values_U = np.zeros(nummaps)
 
 
-	mapdata = hp.read_map('/Users/mpeel/Documents/maps/planck2018/smooth_pol/512_60.00smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits',field=None)
+	mapdata = hp.read_map('/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits',field=None)
 	# mapdata1 = hp.pixelfunc.reorder(mapdata[1],n2r=True)
 	# mapdata2 = hp.pixelfunc.reorder(mapdata[2],n2r=True)
 	qmap_planck = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask

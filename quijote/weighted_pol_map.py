@@ -18,12 +18,16 @@ def noiserealisation(inputmap, numpixels):
     newmap = np.random.normal(scale=1.0, size=numpixels) * inputmap
     return newmap
 
-nside = 256
+nside = 512
 npix = hp.nside2npix(nside)
 
-indirectory = '/Users/mpeel/Documents/maps/quijote_201905/smooth/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_201905/analyse/'
-date='201905'
+indirectory = '/Users/mpeel/Documents/maps/quijote_201907/smooth/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/analyse/'
+date='201907'
+
+# indirectory = '/Users/mpeel/Documents/maps/quijote_201905/smooth/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_201905/analyse/'
+# date='201905'
 
 prefix='half1mfi'
 maps_half1 = [str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']#str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',
@@ -37,32 +41,33 @@ maps = [str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits'
 doing_quijote = True
 use_halfrings = False
 use_weights = False
-use_reweight_by_rms = False
+use_reweight_by_rms = True
 use_reweight_by_rms_method = 2 # 1 = ricardo, 2 = alberto
 # index = -2.15
 index = -3.0
 use_planck = True
 use_cbass = False
-freqs = [11,13,17,19,11,13,17,19]
+freqs = [17,19,11,13,17,19]#11,13,
 normfreq = 10.0
 
 # These are the ones for combining Planck+WMAP
-doing_quijote = False
-prefix='wmap9_planck2018'
-freqs = [28.4, 44.1, 22.8, 33.0, 40.7]
-maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
+doing_quijote = True
+if doing_quijote != True:
+	prefix='wmap9_planck2018'
+	freqs = [28.4, 44.1, 22.8, 33.0, 40.7]
+	maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
 
-prefix='wmap9'
-freqs = [22.8, 33.0, 40.7]
-maps = ['512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
+	prefix='wmap9'
+	freqs = [22.8, 33.0, 40.7]
+	maps = ['512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
 
-prefix='planck2018'
-freqs = [28.4, 44.1]
-maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits']
+	prefix='planck2018'
+	freqs = [28.4, 44.1]
+	maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits']
 
-normfreq = 28.4
-indirectory = '/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/'
-outdirectory = '/Users/mpeel/Documents/maps/wmap9_planck2018_weight/'
+	normfreq = 28.4
+	indirectory = '/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/'
+	outdirectory = '/Users/mpeel/Documents/maps/wmap9_planck2018_weight/'
 
 if use_planck:
 	planckmap = hp.read_map('/Users/mpeel/Documents/maps/wmap_planck_pol/weighted_both_debwk_feb2015_tqu.fits',field=None)
