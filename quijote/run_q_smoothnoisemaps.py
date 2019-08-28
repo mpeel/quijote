@@ -14,6 +14,32 @@ output_nside = [512]#, 256, 128, 64]
 
 mfi_l,mfi_111,mfi_113,mfi_217,mfi_219,mfi_311,mfi_313,mfi_417,mfi_419 = np.loadtxt('/net/nas/proyectos/quijote/mikepeel/quijote_mfi_wfs.dat',unpack=True)
 
+data, header = fits.getdata('/net/nas/proyectos/quijote/mikepeel/wf_mfi2_gauss.fits', 0, header=True)
+# print(header)
+mfi_l = data['L'][0]
+print(mfi_l)
+mfi_wf = data['WL_MFI'][0]
+print(np.shape(mfi_wf))
+print(np.shape(mfi_wf[:][0][0]))
+mfi_111 = []
+mfi_113 = []
+mfi_217 = []
+mfi_219 = []
+mfi_311 = []
+mfi_313 = []
+mfi_417 = []
+mfi_419 = []
+for i in range(0,len(mfi_wf)):
+	mfi_111.append(mfi_wf[i][0][0])
+	mfi_113.append(mfi_wf[i][1][0])
+	mfi_217.append(mfi_wf[i][0][1])
+	mfi_219.append(mfi_wf[i][1][1])
+	mfi_311.append(mfi_wf[i][0][2])
+	mfi_313.append(mfi_wf[i][1][2])
+	mfi_417.append(mfi_wf[i][0][3])
+	mfi_419.append(mfi_wf[i][1][3])
+print(mfi_111)
+# exit()
 
 # July 2019 release
 directory = '/net/nas/proyectos/quijote/mikepeel/quijote_201907/reform/'
