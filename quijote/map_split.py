@@ -133,6 +133,13 @@ for mapnum in range(0,len(quijote_map)):
 					if types[i] in ['map','mapsmth']:
 						print('Rescaling by ' + str(scale[k][l]))
 						data[i][0][k][l][:] /= scale[k][l]
+						data[i][1][k][l][:] /= scale[k][l]
+						data[i][2][k][l][:] /= scale[k][l]
+					if types[i] == 'weights':
+						print('Rescaling by ' + str((1.0/scale[k][l])**2))
+						data[i][0][k][l][:] *= scale[k][l]**2
+						data[i][1][k][l][:] *= scale[k][l]**2
+						data[i][2][k][l][:] *= scale[k][l]**2
 					if types[i] == 'weights' and invert_weights:
 						# Invert the weights map
 						data[i][0][k][l][data[1][0][k][l]!=0]	= 1.0 / data[i][0][k][l][data[1][0][k][l]!=0]

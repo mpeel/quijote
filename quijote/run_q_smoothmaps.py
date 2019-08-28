@@ -7,7 +7,34 @@ output_resolution = 60.0
 output_nside = [512]#, 256, 128, 64]
 
 mfi_l,mfi_111,mfi_113,mfi_217,mfi_219,mfi_311,mfi_313,mfi_417,mfi_419 = np.loadtxt('/Users/mpeel/Documents/QUIJOTE/MFI/quijote_mfi_wfs.dat',unpack=True)
-
+print(mfi_l)
+print(mfi_111)
+data, header = fits.getdata('/Users/mpeel/Documents/QUIJOTE/MFI/wf_mfi2_gauss.fits', 0, header=True)
+# print(header)
+mfi_l = data['L'][0]
+print(mfi_l)
+mfi_wf = data['WL_MFI'][0]
+print(np.shape(mfi_wf))
+print(np.shape(mfi_wf[:][0][0]))
+mfi_111 = []
+mfi_113 = []
+mfi_217 = []
+mfi_219 = []
+mfi_311 = []
+mfi_313 = []
+mfi_417 = []
+mfi_419 = []
+for i in range(0,len(mfi_wf)):
+	mfi_111.append(mfi_wf[i][0][0])
+	mfi_113.append(mfi_wf[i][1][0])
+	mfi_217.append(mfi_wf[i][0][1])
+	mfi_219.append(mfi_wf[i][1][1])
+	mfi_311.append(mfi_wf[i][0][2])
+	mfi_313.append(mfi_wf[i][1][2])
+	mfi_417.append(mfi_wf[i][0][3])
+	mfi_419.append(mfi_wf[i][1][3])
+print(mfi_111)
+# exit()
 
 # July 2019 release
 directory = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
@@ -49,14 +76,14 @@ newdate = '201907'
 for k in range(0,len(prefixes)):
 	numnside = len(output_nside)
 	for i in range(0,numnside):
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_11.0_1.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'1_11.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_111),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.886835*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_11.0_3.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'3_11.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_311),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.840227*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_13.0_1.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'1_13.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_113),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.892011*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_13.0_3.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'3_13.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_313),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.845983*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_17.0_2.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'2_17.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_217),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.630364*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_17.0_4.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'4_17.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_417),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.651673*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_19.0_2.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'2_19.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_219),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.630364*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
-		smoothmap(directory,outdirectory,prefixes[k]+'_map_19.0_4.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'4_19.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_419),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.651673*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2])
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_11.0_1.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'1_11.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_111),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.886835*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_11.0_3.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'3_11.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_311),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.840227*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_13.0_1.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'1_13.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_113),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.892011*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_13.0_3.fits',str(output_nside[i])+'_60.00smoothed_'+newprefixes[k]+'3_13.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_313),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.845983*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_17.0_2.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'2_17.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_217),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.630364*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_17.0_4.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'4_17.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_417),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.651673*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_19.0_2.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'2_19.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_219),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.630364*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
+		smoothmap(directory,outdirectory,prefixes[k]+'_map_19.0_4.fits',str(output_nside[i])+'_'+str(output_resolution)+'smoothed_'+newprefixes[k]+'4_19.0_512_'+newdate+'_mKCMBunits.fits', output_resolution,nside_out=output_nside[i],windowfunction=np.sqrt(mfi_419),usehealpixfits=True,taper_gauss=True,taper_gauss_sigma=0.651673*60,minmapvalue=-100,maxmapvalue=100,minmaxmaps=[1,2],normalise=False,useunseen=True)
 
 
 # This was cosine smoothing
