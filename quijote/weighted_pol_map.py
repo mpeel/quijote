@@ -22,7 +22,7 @@ nside = 512
 npix = hp.nside2npix(nside)
 
 indirectory = '/Users/mpeel/Documents/maps/quijote_201907/smooth/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/analyse/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/analysetemp/'
 date='201907'
 
 # indirectory = '/Users/mpeel/Documents/maps/quijote_201905/smooth/'
@@ -48,7 +48,18 @@ index = -3.0
 use_planck = True
 use_cbass = False
 freqs = [17,19,11,13,17,19]#11,13,
-normfreq = 10.0
+normfreq = 28.4#10.0
+
+# Combine Planck+WMAP
+# indirectory = '/Users/mpeel/Documents/maps/quijote_201907/smoothcomb/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/analysecomb/'
+# freqs = [17,19,11,13,17,19, 28.4, 44.1, 22.8, 33.0, 40.7]
+# maps.append('512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits')
+# maps.append('512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits')
+# maps.append('512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits')
+# maps.append('512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits')
+# maps.append('512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits')
+# normfreq = 28.4
 
 # These are the ones for combining Planck+WMAP
 doing_quijote = True
@@ -57,13 +68,13 @@ if doing_quijote != True:
 	freqs = [28.4, 44.1, 22.8, 33.0, 40.7]
 	maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
 
-	prefix='wmap9'
-	freqs = [22.8, 33.0, 40.7]
-	maps = ['512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
+	# prefix='wmap9'
+	# freqs = [22.8, 33.0, 40.7]
+	# maps = ['512_60.0smoothed_wmap9beam_22.8_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_33.0_512_20132018_mKCMBunits.fits','512_60.0smoothed_wmap9beam_40.7_512_20132018_mKCMBunits.fits']
 
-	prefix='planck2018'
-	freqs = [28.4, 44.1]
-	maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits']
+	# prefix='planck2018'
+	# freqs = [28.4, 44.1]
+	# maps = ['512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits','512_60.0smoothed_PlanckR3fullbeam_44.1_1024_2018_mKCMBunits.fits']
 
 	normfreq = 28.4
 	indirectory = '/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/'
@@ -144,15 +155,20 @@ for i in range(0,nummaps):
 	hp.mollview(np.sqrt(mapdata[1]**2+mapdata[2]**2),min=0,max=1)
 	plt.savefig(outdirectory+maps[i]+'_P.pdf')
 
-	if doing_quijote == False:
-		if 'Planck' in maps[i]:
-			var_i = mapdata[4].copy()
-			var_q = mapdata[7].copy()
-			var_u = mapdata[9].copy()
-		else:
-			var_i = mapdata[3].copy()
-			var_q = mapdata[3].copy()
-			var_u = mapdata[3].copy()
+	if 'Planck' in maps[i]:
+		var_i = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_mKCMBunits_4_variance'),field=None)
+		var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_mKCMBunits_7_variance'),field=None)
+		var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_mKCMBunits_9_variance'),field=None)
+		# var_i = mapdata[4].copy()
+		# var_q = mapdata[7].copy()
+		# var_u = mapdata[9].copy()
+	elif 'wmap' in maps[i]:
+		var_i = hp.read_map(indirectory+maps[i].replace('60.0s','60.0s').replace('_mKCMBunits','_mKCMBunits_0.fits_variance'),field=None)
+		var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.0s').replace('_mKCMBunits','_mKCMBunits_1.fits_variance'),field=None)
+		var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.0s').replace('_mKCMBunits','_mKCMBunits_3.fits_variance'),field=None)
+		# var_i = mapdata[3].copy()
+		# var_q = mapdata[3].copy()
+		# var_u = mapdata[3].copy()
 
 	if use_halfrings:
 		map_half1 = hp.read_map(indirectory+maps_half1[i],field=None)
@@ -174,7 +190,7 @@ for i in range(0,nummaps):
 		var_i = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_0_variance'),field=None)
 		var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
 		var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
-	elif use_reweight_by_rms:
+	elif use_reweight_by_rms and 'Planck' not in maps[i] and 'wmap' not in maps[i]:
 		map_half1 = hp.read_map(indirectory+maps_half1[i],field=None)
 		map_half2 = hp.read_map(indirectory+maps_half2[i],field=None)
 		diff_i = (np.abs(map_half1[0] - map_half2[0])/2.0)#**2
@@ -297,7 +313,10 @@ hp.mollview(np.sqrt(combine_q**2+combine_u**2)*commonmask,min=0,max=1.2,cmap=plt
 plt.savefig(outdirectory+prefix+'_combine_P.pdf')
 
 hp.write_map(outdirectory+prefix+'_combine_P_nomask.fits',np.sqrt(combine_q**2+combine_u**2),overwrite=True)
-hp.mollview(np.sqrt(combine_q**2+combine_u**2),min=0,max=1.2,cmap=plt.get_cmap('jet'))
+if doing_quijote:
+	hp.mollview(np.sqrt(combine_q**2+combine_u**2),min=0,max=0.03,cmap=plt.get_cmap('jet'))
+else:
+	hp.mollview(np.sqrt(combine_q**2+combine_u**2),min=0,max=0.03,cmap=plt.get_cmap('jet'))
 plt.savefig(outdirectory+prefix+'_combine_P_nomask.pdf')
 
 hp.write_map(outdirectory+prefix+'_combine.fits',[np.sqrt(combine_q**2+combine_u**2),combine_q,combine_u,1.0/weight_q,1.0/weight_u],overwrite=True)

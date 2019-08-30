@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
 from scipy import odr
+from astrocode.fitspectrum.astroutils import *
 
 def linfit(x, param):
 	return param[0]*x+param[1]
@@ -115,6 +116,29 @@ def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq
 def calc_std_over_n(vals):
 	return np.std(vals)/np.sqrt(len(vals))
 
+def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputtt='temp',outputmap='temp'):
+	offsetmap = np.zeros(hp.nside2npix(nside))
+	uncmap = np.zeros(hp.nside2npix(nside))
+	for i in range(0,int(np.max(nsidemask))):
+		if len(map1[nsidemask==i]) > 3:
+			if sigmamap_x != []:
+				print(sigmamap_x[nside==i])
+				fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i],sigma_x=sigmamap_x[nside==i])
+			else:
+				fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i])
+			offsetmap[i] = fit[1]
+			uncmap[i] = fiterr[1]
+	if outputmap != 'temp':
+		hp.write_map(outputmap+'.fits',[offsetmap,uncmap],overwrite=True)
+		hp.mollview(offsetmap)
+		plt.savefig(outputmap)
+		plt.clf()
+		hp.mollview(uncmap)
+		plt.savefig(outputmap.replace('.','_unc.'))
+		plt.clf()
+	return offsetmap
+
+
 # # First, do a quick test
 # X,Xerr,Y,Yerr = np.loadtxt('polarised_intensity_23ghz_30ghz_fermi_bubble.dat',unpack=True)
 # print(X)
@@ -139,6 +163,11 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 
 	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/smooth/'
 	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
+
+
+	nsidemask = np.asarray(nside_mask(nside_out,8))
+	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
+	plt.savefig(outdirectory+'_nside_mask.png')
 
 	nummaps = len(maps)
 	freqs = [11,13,17,19,11,13,17,19]
@@ -200,6 +229,16 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		quickmask[polang_unc_map_11 < polang_err_threshold] = 1
 	quickmask[commonmask == 0] = 0
 
+	othermask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits')
+	othermask = hp.ud_grade(othermask,nside_out,order_in='RING',order_out='RING')
+	othermask[othermask != 1.0] = 0
+	quickmask = othermask
+	nsidemask = np.multiply(nsidemask,othermask)
+	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
+	plt.savefig(outdirectory+'_nside_mask2.png')
+
+
+
 	mapdata = hp.read_map('/Users/mpeel/Documents/maps/wmap_planck_pol/weighted_both_debwk_feb2015_tqu.fits',field=None)
 	mapdata1 = hp.pixelfunc.reorder(-mapdata[1],n2r=True)
 	mapdata2 = hp.pixelfunc.reorder(-mapdata[2],n2r=True)
@@ -230,7 +269,10 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 	quickmask[umap_wmap*(11.0/23.0)**-3.0 < -threshold3] = 0
 	quickmask[umap_wmap*(11.0/23.0)**-3.0 > threshold3] = 0
 
-	# hp.write_map(outdirectory+'_mask.fits',quickmask,overwrite=False)
+	hp.write_map(outdirectory+'_quickmask.fits',quickmask,overwrite=True)
+	hp.mollview(quickmask,norm='hist')
+	plt.savefig(outdirectory+'_quickmask.png')
+	plt.clf()
 	# exit()
 
 
@@ -285,6 +327,10 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 	if use_variance:
 		polang_unc_map_11 = calc_polang_unc(qmap_311[:],umap_311[:],np.sqrt(var_q_311),np.sqrt(var_u_311))
 
+	offsetmap = run_offset_map(qmap_wmap*(11.0/23.0)**-3.0,qmap_311,np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_wmap_Q_sigma_',outputmap=outdirectory+'_offsetQ311wmap.png')
+	print(np.average(offsetmap[offsetmap != 0.0]))
+	offsetmap = run_offset_map(umap_wmap*(11.0/23.0)**-3.0,umap_311,np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_wmap_U_sigma_',outputmap=outdirectory+'_offsetU311wmap.png')
+	print(np.average(offsetmap[offsetmap != 0.0]))
 
 	combhist = np.zeros((nummaps,89))
 	diff_to_11 = np.zeros(nummaps)
@@ -322,6 +368,8 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 			var_q[~np.isfinite(var_q)] = 10000.0
 			var_u[~np.isfinite(var_u)] = 10000.0
 
+			offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311)[0],nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
+
 			# Check for offsets vs. the 11GHz maps
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=np.sqrt(var_q_311[quickmask==1]))
 		else:
@@ -335,6 +383,9 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 
 		if use_variance:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=np.sqrt(var_u_311[quickmask==1]))
+
+			offsetmap = run_offset_map(umap_311,umap,np.sqrt(var_u),sigmamap_x=np.sqrt(var_u_311)[0],nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_'+maps[i]+'_U_3_',outputmap=outdirectory+'_offset_U311_'+maps[i]+'.png')
+
 		else:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png')
 		print(fit,fiterr)
@@ -345,6 +396,9 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		polang_map = calc_polang(qmap,umap)
 		if use_variance:
 			polang_unc_map = calc_polang_unc(qmap,umap,np.sqrt(var_q),np.sqrt(var_u))
+
+
+
 
 		print(np.median(polang_map[quickmask==1]))
 		hist = np.histogram(polang_map[quickmask == 1], bins=np.arange(0.0,90.0,1.0))
