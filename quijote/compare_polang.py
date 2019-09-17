@@ -116,7 +116,7 @@ def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq
 def calc_std_over_n(vals):
 	return np.std(vals)/np.sqrt(len(vals))
 
-def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputtt='temp',outputmap='temp'):
+def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputtt='temp',outputmap='temp',sigmacut=3.0):
 	offsetmap = np.zeros(hp.nside2npix(nside))
 	uncmap = np.zeros(hp.nside2npix(nside))
 	for i in range(0,int(np.max(nsidemask))):
@@ -128,6 +128,11 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 				fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i])
 			offsetmap[i] = fit[1]
 			uncmap[i] = fiterr[1]
+	avgerr = np.nanmedian(uncmap[uncmap != 0.0])
+	# print(avgerr)
+	# input('Continue?')
+	offsetmap[np.abs(uncmap) > sigmacut * avgerr] = hp.UNSEEN
+	uncmap[np.abs(uncmap) > sigmacut * avgerr] = hp.UNSEEN
 	if outputmap != 'temp':
 		hp.write_map(outputmap+'.fits',[offsetmap,uncmap],overwrite=True)
 		hp.mollview(offsetmap)
