@@ -42,12 +42,19 @@ invert_weights = True
 #types = ['map','weights','nhits']
 
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half1_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half2_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits']
-outdir = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
-prefix = ['mfi_jul2019', 'mfi_jul2019_half1', 'mfi_jul2019_half2']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half1_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_half2_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
+# prefix = ['mfi_jul2019', 'mfi_jul2019_half1', 'mfi_jul2019_half2']
+# types = ['map','mapsmth','nhits','weights']
+
+quijote_map = ['/Users/mpeel/Documents/maps/quijote_201911/quijote_combinedmaps_select_withcov_rfi_newflagstat_nov2019_recalib_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201911/quijote_combinedmaps_select_withcov_rfi_newflagstat_half1_nov2019_recalib_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_201911/quijote_combinedmaps_select_withcov_rfi_newflagstat_half2_nov2019_recalib_nside512_finalmaskfdec2.fits']
+outdir = '/Users/mpeel/Documents/maps/quijote_201911/reform/'
+prefix = ['mfi_nov2019', 'mfi_nov2019_half1', 'mfi_nov2019_half2']
 types = ['map','mapsmth','nhits','weights']
-# scale = [[1.0, 1.0, 1.0, 1.0],[1.0, 1.0, 1.0, 1.0]]
-scale = [[1.0, 0.91, 0.88, 0.96], [1.0, 0.88, 0.88, 0.92]]
+
+
+scale = [[1.0, 1.0, 1.0, 1.0],[1.0, 1.0, 1.0, 1.0]]
+# scale = [[1.0, 0.91, 0.88, 0.96], [1.0, 0.88, 0.88, 0.92]]
 
 print(len(quijote_map))
 print(len(prefix))

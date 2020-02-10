@@ -51,7 +51,7 @@ def calc_polang(Q, U):
 	return 0.5*np.arctan2(Q, U) * 180 / np.pi
 
 def calc_polang_unc(Q, U, Qerr, Uerr):
-	unc_map = np.sqrt((Qerr**2)*(-0.5*U/(Q**2.0+U**2.0))**2.0 + (Uerr**2)*(0.5*Q/(Q**2.0+U**2.0))**2.0) * 180 / np.pi
+	unc_map = np.sqrt((Qerr**2)*(-0.5*U/(Q**2.0+U**2.0))**2.0 + (Uerr**2)*(-0.5*Q/(Q**2.0+U**2.0))**2.0) * 180 / np.pi
 	unc_map[~np.isfinite(unc_map)] = 1000.0
 	return unc_map
 
@@ -123,9 +123,17 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 		if len(map1[nsidemask==i]) > 3:
 			if sigmamap_x != []:
 				print(sigmamap_x[nside==i])
-				fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i],sigma_x=sigmamap_x[nside==i])
+				try:
+					fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i],sigma_x=sigmamap_x[nside==i])
+				except:
+					fit = [0.0, hp.UNSEEN]
+					fiterr = [0.0, 0.0]
 			else:
-				fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i])
+				try:
+					fit,fiterr=plot_tt(map1[nsidemask==i],map2[nsidemask==i],outputtt+str(i)+'.png',sigma=sigmamap[nsidemask==i])
+				except:
+					fit = [0.0, hp.UNSEEN]
+					fiterr = [0.0, 0.0]
 			offsetmap[i] = fit[1]
 			uncmap[i] = fiterr[1]
 	avgerr = np.nanmedian(uncmap[uncmap != 0.0])
@@ -133,6 +141,8 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 	# input('Continue?')
 	offsetmap[np.abs(uncmap) > sigmacut * avgerr] = hp.UNSEEN
 	uncmap[np.abs(uncmap) > sigmacut * avgerr] = hp.UNSEEN
+	offsetmap[uncmap==0] = hp.UNSEEN
+	uncmap[uncmap==0] = hp.UNSEEN
 	if outputmap != 'temp':
 		hp.write_map(outputmap+'.fits',[offsetmap,uncmap],overwrite=True)
 		hp.mollview(offsetmap)
@@ -141,6 +151,7 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 		hp.mollview(uncmap)
 		plt.savefig(outputmap.replace('.','_unc.'))
 		plt.clf()
+
 	return offsetmap
 
 
@@ -159,14 +170,16 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 # print(res[1][0]/res[0][0]/np.log(28.4/22.8))
 # exit()
 
-def compare_polang(prefix='mfi', date='201905',use_variance=True):
+def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True):
 	nside = 512
 	npix = hp.nside2npix(nside)
 	nside_out=64
 	npix_out=hp.nside2npix(nside_out)
-	maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
+	maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
+	varmaps = ['', '', 'std_H2_17_sm1deg_nside64.fits', 'std_H2_19_sm1deg_nside64.fits', 'std_H3_11_sm1deg_nside64.fits', 'std_H3_13_sm1deg_nside64.fits', 'std_H4_17_sm1deg_nside64.fits', 'std_H4_19_sm1deg_nside64.fits']
+	# maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
 
-	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/smooth/'
+	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
 	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
 
 
@@ -179,11 +192,12 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 	instrument = ['MFI1','MFI1','MFI2','MFI2','MFI3','MFI3','MFI4','MFI4']
 	normfreq = 28.4
 	index = 3.0
-	commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
+	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',field=None)
+	# commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
 	commonmask = hp.ud_grade(commonmask,nside_out,order_in='RING',order_out='RING')
 
 	# Make a quick mask to get rid of low signal-to-noise pixels
-	use_threshold = True
+	use_threshold = False
 	threshold = 0.8
 	threshold2 = 2.5
 	use_sn = False
@@ -198,10 +212,21 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 	qmap_311 = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 	umap_311 = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
 	if use_variance:
-		var_q_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
-		var_u_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
-		var_q_311 = hp.ud_grade(var_q_311, nside_out, power=0)
-		var_u_311 = hp.ud_grade(var_u_311, nside_out, power=0)
+		if datestr == 'nov2019':
+			if varmaps[i] != '':
+				var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
+				var_q_311 = var[1].copy()**2
+				var_u_311 = var[2].copy()**2
+			else:
+				var_q_311 = np.ones(hp.pixelfunc.nside2npix(64))
+				var_u_311 = np.ones(hp.pixelfunc.nside2npix(64))
+		else:
+			var_q_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
+			var_u_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
+			# var_q_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
+			# var_u_311 = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
+			var_q_311 = hp.ud_grade(var_q_311, nside_out, power=0)
+			var_u_311 = hp.ud_grade(var_u_311, nside_out, power=0)
 
 		var_q_311[var_q_311 < 0.0] = 10000.0
 		var_u_311[var_u_311 < 0.0] = 10000.0
@@ -232,13 +257,15 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		quickmask[np.sqrt((qmap_311/np.sqrt(var_q_311))**2+(umap_311/np.sqrt(var_u_311))**2) > sn_ratio] = 1
 	elif use_polang_err:
 		quickmask[polang_unc_map_11 < polang_err_threshold] = 1
+	else:
+		quickmask[commonmask==1] = 1
 	quickmask[commonmask == 0] = 0
 
-	othermask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits')
-	othermask = hp.ud_grade(othermask,nside_out,order_in='RING',order_out='RING')
-	othermask[othermask != 1.0] = 0
-	quickmask = othermask
-	nsidemask = np.multiply(nsidemask,othermask)
+	# othermask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits')
+	# othermask = hp.ud_grade(othermask,nside_out,order_in='RING',order_out='RING')
+	# othermask[othermask != 1.0] = 0
+	# quickmask = othermask
+	# nsidemask = np.multiply(nsidemask,othermask)
 	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
 	plt.savefig(outdirectory+'_nside_mask2.png')
 
@@ -283,6 +310,8 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 
 	offset_values_Q = np.zeros(nummaps)
 	offset_values_U = np.zeros(nummaps)
+	offset_values_Q_err = np.zeros(nummaps)
+	offset_values_U_err = np.zeros(nummaps)
 
 
 	mapdata = hp.read_map('/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits',field=None)
@@ -299,6 +328,13 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 
 	plot_tt(qmap_wmap[quickmask==1],qmap_planck[quickmask==1],outdirectory+'tt_wmap_planck_Q.png')
 	plot_tt(umap_wmap[quickmask==1],umap_planck[quickmask==1],outdirectory+'tt_wmap_planck_U.png')
+
+	offsetmap = run_offset_map(qmap_wmap*(11.0/23.0)**-3.0,qmap_311,np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_Q_sigma_',outputmap=outdirectory+'_offsetQ311wmap.png')
+	# print(np.average(offsetmap[offsetmap != 0.0]))
+	offsetmap = run_offset_map(umap_wmap*(11.0/23.0)**-3.0,umap_311,np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_U_sigma_',outputmap=outdirectory+'_offsetU311wmap.png')
+	# print(np.average(offsetmap[offsetmap != 0.0]))
+
+
 
 	# Get the offset between 11GHz and Planck/WMAP
 	if use_variance:
@@ -318,6 +354,7 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		fit,fiterr=plot_tt(qmap_wmap[quickmask==1]*(11.0/23.0)**-3.0,qmap_311[quickmask==1],outdirectory+'tt_311_wmap_Q_sigma.png')
 	print(fit,fiterr)
 	offset_values_Q[i] = fit[1]
+	offset_values_Q_err[i] = fiterr[1]
 	if applyoffsets:
 		qmap_311 = qmap_311 - fit[1]
 	if use_variance:
@@ -326,16 +363,12 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		fit,fiterr=plot_tt(umap_wmap[quickmask==1]*(11.0/23.0)**-3.0,umap_311[quickmask==1],outdirectory+'tt_311_wmap_U_sigma.png')
 	print(fit,fiterr)
 	offset_values_U[i] = fit[1]
+	offset_values_U_err[i] = fiterr[1]
 	if applyoffsets:
 		umap_311 = umap_311 - fit[1]
 	polang_map_11 = calc_polang(qmap_311[:],umap_311[:])
 	if use_variance:
 		polang_unc_map_11 = calc_polang_unc(qmap_311[:],umap_311[:],np.sqrt(var_q_311),np.sqrt(var_u_311))
-
-	offsetmap = run_offset_map(qmap_wmap*(11.0/23.0)**-3.0,qmap_311,np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_wmap_Q_sigma_',outputmap=outdirectory+'_offsetQ311wmap.png')
-	print(np.average(offsetmap[offsetmap != 0.0]))
-	offsetmap = run_offset_map(umap_wmap*(11.0/23.0)**-3.0,umap_311,np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_wmap_U_sigma_',outputmap=outdirectory+'_offsetU311wmap.png')
-	print(np.average(offsetmap[offsetmap != 0.0]))
 
 	combhist = np.zeros((nummaps,89))
 	diff_to_11 = np.zeros(nummaps)
@@ -362,10 +395,19 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 
 		# Get the variance maps
 		if use_variance:
-			var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
-			var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
-			var_q = hp.ud_grade(var_q, nside_out, power=0)
-			var_u = hp.ud_grade(var_u, nside_out, power=0)
+			if datestr == 'nov2019':
+				if varmaps[i] != '':
+					var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
+					var_q = var[1].copy()**2
+					var_u = var[2].copy()**2
+				else:
+					var_q = np.ones(hp.pixelfunc.nside2npix(64))
+					var_u = np.ones(hp.pixelfunc.nside2npix(64))
+			else:
+				var_q = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_1_variance'),field=None)
+				var_u = hp.read_map(indirectory+maps[i].replace('60.0s','60.00s').replace('_mKCMBunits','_weight_2_variance'),field=None)
+				var_q = hp.ud_grade(var_q, nside_out, power=0)
+				var_u = hp.ud_grade(var_u, nside_out, power=0)
 			var_q[var_q < 0.0] = 10000.0
 			var_u[var_u < 0.0] = 10000.0
 			var_q[var_q==0.0] = 10000.0
@@ -373,7 +415,7 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 			var_q[~np.isfinite(var_q)] = 10000.0
 			var_u[~np.isfinite(var_u)] = 10000.0
 
-			offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311)[0],nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
+			offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
 
 			# Check for offsets vs. the 11GHz maps
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=np.sqrt(var_q_311[quickmask==1]))
@@ -385,11 +427,12 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 			qmap = qmap-fit[1]
 		if i != 4:
 			offset_values_Q[i] = fit[1]
+			offset_values_Q_err[i] = fiterr[1]
 
 		if use_variance:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=np.sqrt(var_u_311[quickmask==1]))
 
-			offsetmap = run_offset_map(umap_311,umap,np.sqrt(var_u),sigmamap_x=np.sqrt(var_u_311)[0],nsidemask=nsidemask,nside=8,outputtt=outdirectory+'tt_311_'+maps[i]+'_U_3_',outputmap=outdirectory+'_offset_U311_'+maps[i]+'.png')
+			offsetmap = run_offset_map(umap_311,umap,np.sqrt(var_u),sigmamap_x=np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_U_3_',outputmap=outdirectory+'_offset_U311_'+maps[i]+'.png')
 
 		else:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png')
@@ -398,6 +441,7 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 			umap = umap-fit[1]
 		if i != 4:
 			offset_values_U[i] = fit[1]
+			offset_values_U_err[i] = fiterr[1]
 		polang_map = calc_polang(qmap,umap)
 		if use_variance:
 			polang_unc_map = calc_polang_unc(qmap,umap,np.sqrt(var_q),np.sqrt(var_u))
@@ -542,9 +586,13 @@ def compare_polang(prefix='mfi', date='201905',use_variance=True):
 		plt.clf()
 
 	# print(combhist)
+	print('Offsets in Q and U:')
 	np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
-	print(offset_values_Q[2:])
-	print(offset_values_U[2:])
+	print(offset_values_Q[2:]*1000)
+	print(offset_values_U[2:]*1000)
+	print('Uncertainties:')
+	print(offset_values_Q_err[2:]*1000)
+	print(offset_values_U_err[2:]*1000)
 	np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
 	print('Diff to 11:')
 	print(diff_to_11[2:])
