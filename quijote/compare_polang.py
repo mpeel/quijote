@@ -183,6 +183,10 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
 
 
+	maps = ['FG_QJT_nominal_pluz_haze_h1_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h1_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_19.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_19.0_512_1.0deg.fits']
+	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/haze/'
+	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse_haze/'
+
 	nsidemask = np.asarray(nside_mask(nside_out,8))
 	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
 	plt.savefig(outdirectory+'_nside_mask.png')
@@ -193,6 +197,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	normfreq = 28.4
 	index = 3.0
 	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',field=None)
+	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_satband_nside512.fits',field=None)
 	# commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
 	commonmask = hp.ud_grade(commonmask,nside_out,order_in='RING',order_out='RING')
 
@@ -202,7 +207,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	threshold2 = 2.5
 	use_sn = False
 	sn_ratio = 5.0
-	use_polang_err = False
+	use_polang_err = True
 	polang_err_threshold = 5.0
 
 	applyoffsets = True
@@ -213,7 +218,14 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	umap_311 = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
 	if use_variance:
 		if datestr == 'nov2019':
-			if varmaps[i] != '':
+			if 'FG_QJT' in maps[i]:
+				var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
+				print(np.shape(var))
+				var_q_311 = 1.0/var[1]
+				var_u_311 = 1.0/var[2]
+				var_q_311 = hp.ud_grade(var_q_311, nside_out, power=2)
+				var_u_311 = hp.ud_grade(var_u_311, nside_out, power=2)
+			elif varmaps[i] != '':
 				var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
 				var_q_311 = var[1].copy()**2
 				var_u_311 = var[2].copy()**2
@@ -329,9 +341,9 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	plot_tt(qmap_wmap[quickmask==1],qmap_planck[quickmask==1],outdirectory+'tt_wmap_planck_Q.png')
 	plot_tt(umap_wmap[quickmask==1],umap_planck[quickmask==1],outdirectory+'tt_wmap_planck_U.png')
 
-	offsetmap = run_offset_map(qmap_wmap*(11.0/23.0)**-3.0,qmap_311,np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_Q_sigma_',outputmap=outdirectory+'_offsetQ311wmap.png')
+	# offsetmap = run_offset_map(qmap_wmap*(11.0/23.0)**-3.0,qmap_311,np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_Q_sigma_',outputmap=outdirectory+'_offsetQ311wmap.png')
 	# print(np.average(offsetmap[offsetmap != 0.0]))
-	offsetmap = run_offset_map(umap_wmap*(11.0/23.0)**-3.0,umap_311,np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_U_sigma_',outputmap=outdirectory+'_offsetU311wmap.png')
+	# offsetmap = run_offset_map(umap_wmap*(11.0/23.0)**-3.0,umap_311,np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_wmap_U_sigma_',outputmap=outdirectory+'_offsetU311wmap.png')
 	# print(np.average(offsetmap[offsetmap != 0.0]))
 
 
@@ -390,13 +402,27 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	for i in range(2,nummaps):
 		print(maps[i])
 		mapdata = hp.read_map(indirectory+maps[i],field=None)
+		mapdata[mapdata < -1e10] = hp.UNSEEN
 		qmap = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 		umap = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
-
+		quickmask[qmap < -1e10] = 0
+		quickmask[umap < -1e10] = 0
+		qmap[qmap < -1e10] = hp.UNSEEN
+		umap[umap < -1e10] = hp.UNSEEN
+		hp.mollview(qmap,norm='hist')
+		plt.savefig(outdirectory+'test_'+maps[i]+'_Q.png')
+		hp.mollview(umap,norm='hist')
+		plt.savefig(outdirectory+'test_'+maps[i]+'_U.png')
 		# Get the variance maps
 		if use_variance:
 			if datestr == 'nov2019':
-				if varmaps[i] != '':
+				if 'FG_QJT' in maps[i]:
+					var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
+					var_q = 1.0/var[1]
+					var_u = 1.0/var[2]
+					var_q = hp.ud_grade(var_q, nside_out, power=0)
+					var_u = hp.ud_grade(var_u, nside_out, power=0)
+				elif varmaps[i] != '':
 					var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
 					var_q = var[1].copy()**2
 					var_u = var[2].copy()**2
@@ -415,7 +441,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			var_q[~np.isfinite(var_q)] = 10000.0
 			var_u[~np.isfinite(var_u)] = 10000.0
 
-			offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
+			# offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
 
 			# Check for offsets vs. the 11GHz maps
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=np.sqrt(var_q_311[quickmask==1]))
@@ -432,7 +458,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		if use_variance:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=np.sqrt(var_u_311[quickmask==1]))
 
-			offsetmap = run_offset_map(umap_311,umap,np.sqrt(var_u),sigmamap_x=np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_U_3_',outputmap=outdirectory+'_offset_U311_'+maps[i]+'.png')
+			# offsetmap = run_offset_map(umap_311,umap,np.sqrt(var_u),sigmamap_x=np.sqrt(var_u_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_U_3_',outputmap=outdirectory+'_offset_U311_'+maps[i]+'.png')
 
 		else:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png')
@@ -445,7 +471,11 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		polang_map = calc_polang(qmap,umap)
 		if use_variance:
 			polang_unc_map = calc_polang_unc(qmap,umap,np.sqrt(var_q),np.sqrt(var_u))
-
+		polang2 = polang_map.copy()
+		polang2[quickmask==0] = 0.0
+		polang2[polang2 > 180.0] = 0.0
+		hp.mollview(polang2)
+		plt.savefig(outdirectory+'test_polang_map_'+maps[i]+'.png')
 
 
 
