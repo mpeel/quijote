@@ -36,12 +36,26 @@ for i in range(0,len(mfi_wf)):
 print(mfi_111)
 # exit()
 
+# March 2020 release
+# directory = '/Users/mpeel/Documents/maps/quijote_202003/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_202003/smooth/'
+# prefixes = ['mfi_mar2020']
+# newprefixes = ['mfi']
+# newdate = '202003'
+
+# November 2019 release
+directory = '/Users/mpeel/Documents/maps/quijote_201911/reform/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_201911/smooth/'
+prefixes = ['mfi_nov2019']
+newprefixes = ['mfi']
+newdate = '201911'
+
 # July 2019 release
-directory = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/smooth/'
-prefixes = ['mfi_jul2019','mfi_jul2019_half1','mfi_jul2019_half2']
-newprefixes = ['mfi','half1mfi','half2mfi']
-newdate = '201907'
+# directory = '/Users/mpeel/Documents/maps/quijote_201907/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_201907/smooth/'
+# prefixes = ['mfi_jul2019','mfi_jul2019_half1','mfi_jul2019_half2']
+# newprefixes = ['mfi','half1mfi','half2mfi']
+# newdate = '201907'
 
 
 # May 2019 release

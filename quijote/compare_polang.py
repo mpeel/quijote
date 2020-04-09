@@ -175,17 +175,17 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	npix = hp.nside2npix(nside)
 	nside_out=64
 	npix_out=hp.nside2npix(nside_out)
-	maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
+	# maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
 	varmaps = ['', '', 'std_H2_17_sm1deg_nside64.fits', 'std_H2_19_sm1deg_nside64.fits', 'std_H3_11_sm1deg_nside64.fits', 'std_H3_13_sm1deg_nside64.fits', 'std_H4_17_sm1deg_nside64.fits', 'std_H4_19_sm1deg_nside64.fits']
-	# maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
+	maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
 
 	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
 	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
 
 
-	maps = ['FG_QJT_nominal_pluz_haze_h1_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h1_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_19.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_19.0_512_1.0deg.fits']
-	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/haze/'
-	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse_haze/'
+	# maps = ['FG_QJT_nominal_pluz_haze_h1_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h1_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_19.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_19.0_512_1.0deg.fits']
+	# indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/haze/'
+	# outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse_haze/'
 
 	nsidemask = np.asarray(nside_mask(nside_out,8))
 	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
@@ -217,7 +217,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	qmap_311 = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 	umap_311 = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
 	if use_variance:
-		if datestr == 'nov2019':
+		if 'nov2019' in datestr or 'mar2020' in datestr:
 			if 'FG_QJT' in maps[i]:
 				var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 				print(np.shape(var))
@@ -226,7 +226,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 				var_q_311 = hp.ud_grade(var_q_311, nside_out, power=2)
 				var_u_311 = hp.ud_grade(var_u_311, nside_out, power=2)
 			elif varmaps[i] != '':
-				var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
+				var = hp.read_map(indirectory+'../../quijote_201911/noise/'+varmaps[i],field=None)
 				var_q_311 = var[1].copy()**2
 				var_u_311 = var[2].copy()**2
 			else:
@@ -415,7 +415,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.savefig(outdirectory+'test_'+maps[i]+'_U.png')
 		# Get the variance maps
 		if use_variance:
-			if datestr == 'nov2019':
+			if 'nov2019' in datestr or 'mar2020' in datestr:
 				if 'FG_QJT' in maps[i]:
 					var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 					var_q = 1.0/var[1]
@@ -423,7 +423,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 					var_q = hp.ud_grade(var_q, nside_out, power=0)
 					var_u = hp.ud_grade(var_u, nside_out, power=0)
 				elif varmaps[i] != '':
-					var = hp.read_map(indirectory+'../noise/'+varmaps[i],field=None)
+					var = hp.read_map(indirectory+'../../quijote_201911/noise/'+varmaps[i],field=None)
 					var_q = var[1].copy()**2
 					var_u = var[2].copy()**2
 				else:
@@ -508,10 +508,20 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 
 		if i == 2:
 			polang_map_17 = polang_map.copy()
+			polmap_17 = polmap_temp.copy()
+			Q_17 = qmap.copy()
+			U_17 = umap.copy()
+			Q_17_unc = np.sqrt(var_q)
+			U_17_unc = np.sqrt(var_u)
 			if use_variance:
 				polang_unc_map_17 = polang_unc_map.copy()
 		elif i == 3:
 			polang_map_19 = polang_map.copy()
+			polmap_19 = polmap_temp.copy()
+			Q_19 = qmap.copy()
+			U_19 = umap.copy()
+			Q_19_unc = np.sqrt(var_q)
+			U_19_unc = np.sqrt(var_u)
 			if use_variance:
 				polang_unc_map_19 = polang_unc_map.copy()
 		elif i == 5:
@@ -523,6 +533,23 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		elif i == 6:
 			print("Difference at 17GHz:")
 			print(np.median(polang_map[quickmask==1]-polang_map_17[quickmask==1]))
+			print('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_17[quickmask==1])))
+			print('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_17[quickmask==1])))
+			print('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_17[quickmask==1])))
+			print('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_17[quickmask==1])))
+			print('In U median: ' + str(np.median(umap[quickmask==1]/U_17[quickmask==1])))
+			print('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_17[quickmask==1])))
+
+			print('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_17[quickmask==1]**2))))
+			print('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_17[quickmask==1]**2))))
+			print('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_17[quickmask==1]**2))))
+			print('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_17[quickmask==1]**2))))
+
+			plt.close()
+			plt.clf()
+			fit,fiterr=plot_tt(Q_17[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_17.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_17_unc[quickmask==1])
+			fit,fiterr=plot_tt(U_17[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_17.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_17_unc[quickmask==1])
+
 			if use_variance:
 				print(np.average(polang_map[quickmask==1]-polang_map_17[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_17[quickmask==1]**2.0)))
 			hist = np.histogram(polang_map[quickmask==1]-polang_map_17[quickmask==1], bins=np.arange(0.0,90.0,1.0))
@@ -536,6 +563,24 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		elif i == 7:
 			print("Difference at 19GHz:")
 			print(np.median(polang_map[quickmask==1]-polang_map_19[quickmask==1]))
+			print('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_19[quickmask==1])))
+			print('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_19[quickmask==1])))
+
+			print('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_19[quickmask==1])))
+			print('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_19[quickmask==1])))
+			print('In U median: ' + str(np.median(umap[quickmask==1]/U_19[quickmask==1])))
+			print('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_19[quickmask==1])))
+
+			print('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_19[quickmask==1]**2))))
+			print('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_19[quickmask==1]**2))))
+			print('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_19[quickmask==1]**2))))
+			print('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_19[quickmask==1]**2))))
+			plt.close()
+			plt.clf()
+			fit,fiterr=plot_tt(Q_19[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_19.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_19_unc[quickmask==1])
+			fit,fiterr=plot_tt(U_19[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_19.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_19_unc[quickmask==1])
+
+
 			if use_variance:
 				print(np.average(polang_map[quickmask==1]-polang_map_19[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_19[quickmask==1]**2.0)))
 			hist = np.histogram(polang_map[quickmask==1]-polang_map_19[quickmask==1], bins=np.arange(0.0,90.0,1.0))
