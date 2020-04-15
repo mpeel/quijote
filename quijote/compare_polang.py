@@ -217,7 +217,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	qmap_311 = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 	umap_311 = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
 	if use_variance:
-		if 'nov2019' in datestr or 'mar2020' in datestr:
+		if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr:
 			if 'FG_QJT' in maps[i]:
 				var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 				print(np.shape(var))
@@ -415,7 +415,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.savefig(outdirectory+'test_'+maps[i]+'_U.png')
 		# Get the variance maps
 		if use_variance:
-			if 'nov2019' in datestr or 'mar2020' in datestr:
+			if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr:
 				if 'FG_QJT' in maps[i]:
 					var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 					var_q = 1.0/var[1]

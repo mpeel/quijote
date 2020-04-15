@@ -36,6 +36,13 @@ for i in range(0,len(mfi_wf)):
 print(mfi_111)
 # exit()
 
+# April 2019 test
+directory = '/Users/mpeel/Documents/maps/quijote_202004/reform/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_202004/smooth/'
+prefixes = ['mfi_apr2020']
+newprefixes = ['mfi']
+newdate = '202004'
+
 # March 2020 release
 # directory = '/Users/mpeel/Documents/maps/quijote_202003/reform/'
 # outdirectory = '/Users/mpeel/Documents/maps/quijote_202003/smooth/'
@@ -44,11 +51,11 @@ print(mfi_111)
 # newdate = '202003'
 
 # November 2019 release
-directory = '/Users/mpeel/Documents/maps/quijote_201911/reform/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_201911/smooth/'
-prefixes = ['mfi_nov2019']
-newprefixes = ['mfi']
-newdate = '201911'
+# directory = '/Users/mpeel/Documents/maps/quijote_201911/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_201911/smooth/'
+# prefixes = ['mfi_nov2019']
+# newprefixes = ['mfi']
+# newdate = '201911'
 
 # July 2019 release
 # directory = '/Users/mpeel/Documents/maps/quijote_201907/reform/'

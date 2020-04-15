@@ -53,9 +53,14 @@ invert_weights = True
 # types = ['map','mapsmth','nhits','weights']
 
 
-quijote_map = ['/Volumes/Toshiba5TB2/mfi/quijote_202003/quijote_combinedmaps_nominalselect_newang2_withcov_rfi_newflagstat_allatonce5s_mar2020_newang2_withcov_rfi_newflagstat_allatonce_nside512_finalmaskfdec2.fits']
-outdir = '/Users/mpeel/Documents/maps/quijote_202003/reform/'
-prefix = ['mfi_mar2020']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
+# quijote_map = ['/Volumes/Toshiba5TB2/mfi/quijote_202003/quijote_combinedmaps_nominalselect_newang2_withcov_rfi_newflagstat_allatonce5s_mar2020_newang2_withcov_rfi_newflagstat_allatonce_nside512_finalmaskfdec2.fits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_202003/reform/'
+# prefix = ['mfi_mar2020']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
+# types = ['map','nhits','weights']
+
+quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004/quijote_combinedmaps_nominalselect_recalib_withcov_rfi_newflagstat_allatonce5s_apr2020_recalib_withcov_rfi_newflagstat_allatonce_nside512_finalmaskfdec2.fits']
+outdir = '/Users/mpeel/Documents/maps/quijote_202004/reform/'
+prefix = ['mfi_apr2020']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
 types = ['map','nhits','weights']
 
 scale = [[1.0, 1.0, 1.0, 1.0],[1.0, 1.0, 1.0, 1.0]]
