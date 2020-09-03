@@ -38,6 +38,10 @@ def debias_p_mas(Q, U, sigmaQ, sigmaU):
     print(SN)
     return(pmas, sigmap, SN)
 
+def testfunction(param1, param2):
+	test = param1/param2
+	return(test,param1,param2)
+
 # Debiasing, code from Federica
 def debias_p_as(Q, U, sigmaQ, sigmaU):
     p = np.sqrt(Q**2+U**2)
@@ -170,7 +174,7 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 # print(res[1][0]/res[0][0]/np.log(28.4/22.8))
 # exit()
 
-def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True):
+def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True,indirectory=''):
 	nside = 512
 	npix = hp.nside2npix(nside)
 	nside_out=64
@@ -179,9 +183,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	varmaps = ['', '', 'std_H2_17_sm1deg_nside64.fits', 'std_H2_19_sm1deg_nside64.fits', 'std_H3_11_sm1deg_nside64.fits', 'std_H3_13_sm1deg_nside64.fits', 'std_H4_17_sm1deg_nside64.fits', 'std_H4_19_sm1deg_nside64.fits']
 	maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
 
-	indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
-	outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
-
+	if indirectory == '':
+		indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
+		outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
+	else:
+		outdirectory = indirectory+'/analyse/'
+		indirectory = indirectory + '/reform/'
 
 	# maps = ['FG_QJT_nominal_pluz_haze_h1_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h1_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h2_19.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_11.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h3_13.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_17.0_512_1.0deg.fits','FG_QJT_nominal_pluz_haze_h4_19.0_512_1.0deg.fits']
 	# indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/haze/'
@@ -197,7 +204,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	normfreq = 28.4
 	index = 3.0
 	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',field=None)
-	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_satband_nside512.fits',field=None)
+	# commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_satband_nside512.fits',field=None)
 	# commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
 	commonmask = hp.ud_grade(commonmask,nside_out,order_in='RING',order_out='RING')
 
@@ -226,7 +233,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 				var_q_311 = hp.ud_grade(var_q_311, nside_out, power=2)
 				var_u_311 = hp.ud_grade(var_u_311, nside_out, power=2)
 			elif varmaps[i] != '':
-				var = hp.read_map(indirectory+'../../quijote_201911/noise/'+varmaps[i],field=None)
+				var = hp.read_map('/Users/mpeel/Documents/maps/quijote_201911/noise/'+varmaps[i],field=None)
 				var_q_311 = var[1].copy()**2
 				var_u_311 = var[2].copy()**2
 			else:
@@ -423,7 +430,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 					var_q = hp.ud_grade(var_q, nside_out, power=0)
 					var_u = hp.ud_grade(var_u, nside_out, power=0)
 				elif varmaps[i] != '':
-					var = hp.read_map(indirectory+'../../quijote_201911/noise/'+varmaps[i],field=None)
+					var = hp.read_map('/Users/mpeel/Documents/maps/quijote_201911/noise/'+varmaps[i],field=None)
 					var_q = var[1].copy()**2
 					var_u = var[2].copy()**2
 				else:
@@ -709,5 +716,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	plt.plot(hist[1][:-1],hist[0])
 	plt.savefig(outdirectory+'polang_diffplanck_wmap.png')
 	plt.clf()
+	plt.close()
+
+	return [diff_to_wmap[2:], diff_to_wmap_std[2:], diff_to_wmap_2[2:], diff_to_wmap_2_std[2:]]
 
 	# EOF

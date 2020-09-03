@@ -36,12 +36,44 @@ for i in range(0,len(mfi_wf)):
 print(mfi_111)
 # exit()
 
-# April 2019 test
-directory = '/Users/mpeel/Documents/maps/quijote_202004/reform/'
-outdirectory = '/Users/mpeel/Documents/maps/quijote_202004/smooth/'
-prefixes = ['mfi_apr2020']
-newprefixes = ['mfi']
-newdate = '202004'
+# April 2019 test2
+base = '/Volumes/Toshiba5TB2/mfi/quijote_202004b_jk/'
+directory = base+'reform/'
+outdirectory = base+'reform/'
+newdate = '202004b_jk'
+prefixes = ['mfi_apr2020b_pwv1', 'mfi_apr2020b_allatonce', 'mfi_apr2020b_altsample1', 'mfi_apr2020b_altsample2', 'mfi_apr2020b_daynight1', 'mfi_apr2020b_daynight2', 'mfi_apr2020b_fivesample1', 'mfi_apr2020b_fivesample2', 'mfi_apr2020b_half1', 'mfi_apr2020b_half2', 'mfi_apr2020b_halfring1', 'mfi_apr2020b_halfring2', 'mfi_apr2020b_period1', 'mfi_apr2020b_period2', 'mfi_apr2020b_period5', 'mfi_apr2020b_period6', 'mfi_apr2020b_pwv2', 'mfi_apr2020b_ring1', 'mfi_apr2020b_ring2', 'mfi_apr2020b_sample1', 'mfi_apr2020b_sample2', 'mfi_apr2020b_tbem1', 'mfi_apr2020b_tbem2', 'mfi_apr2020b_twosample1', 'mfi_apr2020b_twosample2']
+newprefixes = prefixes.copy()
+for i in range(0,len(newprefixes)):
+	newprefixes[i] = newprefixes[i].replace('_apr2020b','')
+print(newprefixes)
+# exit()
+
+# April 2020 recalib3, 4, 5
+directory = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
+outdirectory = '/Users/mpeel/Documents/maps/quijote_202004b/smooth/'
+prefixes = ['mfi_apr2020_recalib6']#'mfi_apr2020_recalib3','mfi_apr2020_recalib4','mfi_apr2020_recalib5']
+newprefixes = ['mfi_recalib6']#,'mfi_recalib3','mfi_recalib4','mfi_recalib5']
+newdate = '202004b'
+
+prefixes = ['mfi_apr2020_recalib7','mfi_apr2020_recalib8']
+newprefixes = ['mfi_recalib7','mfi_recalib8']
+
+prefixes = ['mfi_apr2020_recalib9']
+newprefixes = ['mfi_recalib9']
+
+# April 2019 test2
+# directory = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_202004b/smooth/'
+# prefixes = ['mfi_apr2020b']
+# newprefixes = ['mfi']
+# newdate = '202004b'
+
+# # April 2019 test
+# directory = '/Users/mpeel/Documents/maps/quijote_202004/reform/'
+# outdirectory = '/Users/mpeel/Documents/maps/quijote_202004/smooth/'
+# prefixes = ['mfi_apr2020']
+# newprefixes = ['mfi']
+# newdate = '202004'
 
 # March 2020 release
 # directory = '/Users/mpeel/Documents/maps/quijote_202003/reform/'
