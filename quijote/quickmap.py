@@ -10,6 +10,7 @@ import astropy.units as u
 
 do_rotated = False
 do_rotation = True
+use_ecliptic = True
 basedir = '/Users/mpeel/Desktop/'
 if do_rotated == True:
 	input_file = basedir+'JUPITERH3B-131010-0447-JC.ctod'
@@ -17,8 +18,8 @@ if do_rotated == True:
 	input_file = basedir+'JUPITERH3A-180626-2007-JC.ctod'
 	pos = (0,0)
 else:
-	input_file = basedir+'JUPITERA-150706-1359.ctod'
-	t = Time('2015-07-06T13:59:00', format='isot', scale='utc')
+	# input_file = basedir+'JUPITERA-150706-1359.ctod'
+	# t = Time('2015-07-06T13:59:00', format='isot', scale='utc')
 
 	input_file = basedir+'JUPITERD-150705-1403.ctod'
 	t = Time('2015-07-05T14:03:00', format='isot', scale='utc')
@@ -31,18 +32,29 @@ else:
 	# input_file = basedir+'JUPITERC-150704-1407.ctod'
 	# t = Time('2015-07-01T15:07:00', format='isot', scale='utc')
 
-	input_file = basedir+'JUPITERH3A-180626-2007.ctod'
-	t = Time('2018-06-26T20:07:00', format='isot', scale='utc')
+	# input_file = basedir+'JUPITERH3A-180626-2007.ctod'
+	# t = Time('2018-06-26T20:07:00', format='isot', scale='utc')
 
 	# Jupiter position
 	loc=EarthLocation(-16.5085,28.3,2390)
 	jupiter=get_body("Jupiter",t,loc)
 	print(jupiter)
 	c_icrs = SkyCoord(ra=jupiter.ra.deg*u.degree, dec=jupiter.dec.deg*u.degree, frame='icrs')
-	print(c_icrs.galactic)
-	pos = (c_icrs.galactic.l.deg,c_icrs.galactic.b.deg)
-
-print(pos)
+	if use_ecliptic:
+		print(c_icrs)
+		# ecliptic = c_icrs.GeocentricMeanEcliptic()
+		print(c_icrs.geocentrictrueecliptic)
+		l_j = c_icrs.geocentrictrueecliptic.lon.rad
+		b_j = c_icrs.geocentrictrueecliptic.lat.rad
+		pos = (c_icrs.geocentrictrueecliptic.lon.deg,c_icrs.geocentrictrueecliptic.lat.deg)
+		# exit()
+	else:
+		print(c_icrs.galactic)
+		pos = (c_icrs.galactic.l.deg,c_icrs.galactic.b.deg)
+		l_j = c_icrs.galactic.l.rad
+		b_j = c_icrs.galactic.b.rad
+	print(l_j)
+	print(b_j)
 
 nside = 512
 
@@ -66,13 +78,23 @@ gl = gl[:,hornnum-1]
 gb = gb[:,hornnum-1]
 data = data[:,channum-1]
 # data = gl.copy()
-l_j = c_icrs.galactic.l.rad
-b_j = c_icrs.galactic.b.rad
-print(l_j)
-print(b_j)
+
+# Change from Galactic to Ecliptic coordinates
+if use_ecliptic:
+	print(gl)
+	positions = SkyCoord(gl*u.degree, gb*u.degree, frame='galactic')
+	gl = positions.geocentrictrueecliptic.lon.deg
+	gb = positions.geocentrictrueecliptic.lat.deg
+	print(gl)
+
+
 if do_rotation:
 	pos = (0,0)
-	input_file = input_file.replace('.ctod','_newrot.ctod')
+	if use_ecliptic:
+		input_file = input_file.replace('.ctod','_newrot_ecliptic.ctod')
+	else:
+		input_file = input_file.replace('.ctod','_newrot.ctod')
+
 	#Turn each l and b into a cartesian vector
 	phi=gl*np.pi/180.0
 	theta=(90.0-gb)*np.pi/180.0
