@@ -51,7 +51,7 @@ comparison = read_quijote_mfi_bandpass_alt(indirectory+'2020-08-06/12-15-04_horn
 
 vals = []
 for i in range(0,4):
-	ratio = np.asarray(reference[i+1]/comparison[i+1])
+	ratio = np.asarray((reference[i+1]-np.median(reference[i+1]))/(comparison[i+1]-np.median(comparison[i+1])))
 	mask = np.ones(len(ratio))
 	mask[comparison[i+1] > 10.0] = 0
 	mask[comparison[i+1] < np.median(comparison[i+1])+1] = 0
@@ -68,7 +68,8 @@ reference = read_quijote_mfi_bandpass_alt(indirectory+'2020-08-06/12-06-44_horn2
 comparison = read_quijote_mfi_bandpass_alt(indirectory+'2020-08-06/11-58-25_horn2_14_22GHz_ch13_16_mod_45deg_hornang_-45.dat')
 
 for i in range(0,4):
-	ratio = np.asarray(reference[i+1]/comparison[i+1])
+	# ratio = np.asarray(reference[i+1]/comparison[i+1])
+	ratio = np.asarray((reference[i+1]-np.median(reference[i+1]))/(comparison[i+1]-np.median(comparison[i+1])))
 	mask = np.ones(len(ratio))
 	mask[comparison[i+1] > 10.0] = 0
 	mask[comparison[i+1] < np.median(comparison[i+1])+0.4] = 0

@@ -60,7 +60,7 @@ def read_quijote_mfi_bandpass_alt(filename):
 
 horns = [2,3,4]
 indirectory = '/Users/mpeel/Documents/QUIJOTE/MFI/2020-06_bandpass/'
-plotdir = indirectory+'plots/'
+plotdir = indirectory+'plots_5oct20/'
 
 for dohorn in horns:
 	if dohorn == 3:
@@ -74,7 +74,8 @@ for dohorn in horns:
 		files_2 = ['2020-08-06/11-25-14_horn2_14_22GHz_ch13_16_mod_0deg_hornang_-45.dat','2020-08-06/11-33-51_horn2_14_22GHz_ch13_16_mod_22_5deg_hornang_-45.dat','2020-08-06/12-06-44_horn2_14_22GHz_ch13_16_mod_45deg_hornang_-45.dat','2020-08-06/12-22-39_horn2_14_22GHz_ch13_16_mod_67_5deg_hornang_-45.dat','2020-08-06/12-46-13_horn2_14_22GHz_ch13_16_mod_67_5deg_hornang_0.dat','2020-08-06/12-54-42_horn2_14_22GHz_ch13_16_mod_45deg_hornang_0.dat','2020-08-06/13-19-16_horn2_14_22GHz_ch13_16_mod_22_5deg_hornang_0.dat','2020-08-06/13-27-36_horn2_14_22GHz_ch13_16_mod_0deg_hornang_0.dat','2020-08-06/13-51-00_horn2_14_22GHz_ch13_16_mod_0deg_hornang_45.dat','2020-08-06/13-59-48_horn2_14_22GHz_ch13_16_mod_22_5deg_hornang_45.dat','2020-08-06/14-24-00_horn2_14_22GHz_ch13_16_mod_45deg_hornang_45.dat','2020-08-06/14-32-06_horn2_14_22GHz_ch13_16_mod_67.5deg_hornang_45.dat','2020-08-06/14-55-22_horn2_14_22GHz_ch13_16_mod_67.5deg_hornang_90.dat','2020-08-06/15-03-18_horn2_14_22GHz_ch13_16_mod_45deg_hornang_90.dat','2020-08-06/15-26-48_horn2_14_22GHz_ch13_16_mod_22.5deg_hornang_90.dat','2020-08-06/15-34-56_horn2_14_22GHz_ch13_16_mod_0deg_hornang_90.dat']
 		rescale_1 = np.ones(len(files_1))
 		rescale_2 = np.ones(len(files_2))
-		rescalefactor = 0.858
+		# rescalefactor = 0.858
+		rescalefactor = 0.513
 		rescale_1[0] = rescalefactor
 		rescale_1[1] = rescalefactor
 		rescale_2[0] = rescalefactor
@@ -94,8 +95,11 @@ for dohorn in horns:
 	for i in range(0,numdatasets):
 		newset1 = read_quijote_mfi_bandpass_alt(indirectory+files_1[i])
 		newset2 = read_quijote_mfi_bandpass_alt(indirectory+files_2[i])
-		newset1[1:] *= rescale_1[i]
-		newset2[1:] *= rescale_2[i]
+		for k in range(1,5):
+			newset1[k] = (newset1[k]-np.median(newset1[k]))*rescale_1[i]+np.median(newset1[k])
+			newset2[k] = (newset2[k]-np.median(newset2[k]))*rescale_2[i]+np.median(newset2[k])
+		# newset1[1:] *= rescale_1[i]
+		# newset2[1:] *= rescale_2[i]
 		# print(np.shape(newset1))
 		# print(np.shape(newset1[1]))
 		newset2 = np.asarray([newset2[1],newset2[2],newset2[3],newset2[4]])
