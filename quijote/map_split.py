@@ -18,7 +18,6 @@ from astrocode.fitspectrum.astroutils import *
 # outdir = '/Users/mpeel/Documents/maps/quijote_201905/reform/'
 # prefix = ['mfi_may2019', 'mfi_may2019_half1', 'mfi_may2019_half2']
 # types = ['map','nhits','weights']
-invert_weights = True
 
 # quijote_map = ['/Users/mpeel/Documents/maps/quijote_201810/quijote_combinedmaps_select_oct2018_test_rfi_alldata_highfk_nside512.fits']
 # outdir = '/Users/mpeel/Documents/maps/quijote_201810/reform/'
@@ -63,21 +62,21 @@ invert_weights = True
 # prefix = ['mfi_apr2020']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
 # types = ['map','nhits','weights']
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib2_withcov_rfi_newflagstat_allatonce5s_apr2020_recalib2_withcov_rfi_newflagstat_allatonce_nside512_finalmaskfdec2.fits']
-outdir = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
-prefix = ['mfi_apr2020b']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
-types = ['map','nhits','weights']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib2_withcov_rfi_newflagstat_allatonce5s_apr2020_recalib2_withcov_rfi_newflagstat_allatonce_nside512_finalmaskfdec2.fits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
+# prefix = ['mfi_apr2020b']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
+# types = ['map','nhits','weights']
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib6_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib6_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']#'/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib3_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib3_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib4_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib4_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib5_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib5_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
-outdir = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
-prefix = ['mfi_apr2020_recalib6']#,'mfi_apr2020_recalib3','mfi_apr2020_recalib4','mfi_apr2020_recalib5']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
-types = ['map','nhits','weights']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib6_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib6_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']#'/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib3_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib3_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib4_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib4_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib5_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib5_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
+# outdir = '/Users/mpeel/Documents/maps/quijote_202004b/reform/'
+# prefix = ['mfi_apr2020_recalib6']#,'mfi_apr2020_recalib3','mfi_apr2020_recalib4','mfi_apr2020_recalib5']#, 'mfi_nov2019_half1', 'mfi_nov2019_half2']
+# types = ['map','nhits','weights']
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib7_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib7_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib8_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib8_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
-prefix = ['mfi_apr2020_recalib7','mfi_apr2020_recalib8']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib7_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib7_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib8_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib8_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
+# prefix = ['mfi_apr2020_recalib7','mfi_apr2020_recalib8']
 
-quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib9_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib9_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
-prefix = ['mfi_apr2020_recalib9']
+# quijote_map = ['/Users/mpeel/Documents/maps/quijote_202004b/quijote_combinedmaps_nominalselect_recalib9_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib9_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits']
+# prefix = ['mfi_apr2020_recalib9']
 
 # Jack-knifes
 # base = '/Volumes/Toshiba5TB2/mfi/quijote_202004b_jk/'
@@ -96,6 +95,12 @@ prefix = ['mfi_apr2020_recalib9']
 # outdir = '/Users/mpeel/Documents/maps/quijote_202007_sim/'
 
 
+invert_weights = True
+indir = '/Users/mpeel/Documents/maps/quijote_202011/'
+outdir = indir+'reform/'
+types = ['map','mapsmth','nhits','weights']
+quijote_map = ['quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_allatonce_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_half1_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_half2_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_halfring1_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_halfring2_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_period1_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_period2_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_period5_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_period6_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_pwv1_nside512_finalmaskfdec2.fits','quijote_combinedmaps_nominalselect_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_apr2020_recalib11_withcov_rfi_newflagstat_raw_pwv2_nside512_finalmaskfdec2.fits']
+prefix = ['mfi_nov2020','mfi_nov2020_half1','mfi_nov2020_half2','mfi_nov2020_halfring1','mfi_nov2020_halfring2','mfi_nov2020_period1','mfi_nov2020_period2','mfi_nov2020_period5','mfi_nov2020_period6','mfi_nov2020_pwv1','mfi_nov2020_pwv2']
 
 scale = [[1.0, 1.0, 1.0, 1.0],[1.0, 1.0, 1.0, 1.0]]
 # scale = [[1.0, 0.91, 0.88, 0.96], [1.0, 0.88, 0.88, 0.92]]
@@ -106,7 +111,7 @@ for mapnum in range(0,len(quijote_map)):
 	print(quijote_map[mapnum], prefix[mapnum])
 	# continue
 
-	inputfits = fits.open(quijote_map[mapnum])
+	inputfits = fits.open(indir+quijote_map[mapnum])
 	print(inputfits[1].header)
 
 	col_names = inputfits[1].columns.names
