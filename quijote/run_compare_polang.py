@@ -33,7 +33,8 @@ print(colours)
 # compare_polang(prefix='mfi_recalib6',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi_recalib7',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi_recalib8',date='202004b',datestr='apr2020b')
-compare_polang(prefix='mfi_recalib9',date='202004b',datestr='apr2020b')
+# compare_polang(prefix='mfi_recalib9',date='202004b',datestr='apr2020b')
+compare_polang(prefix='mfi',date='202011',datestr='nov2020')
 exit()
 
 

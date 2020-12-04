@@ -179,9 +179,9 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	npix = hp.nside2npix(nside)
 	nside_out=64
 	npix_out=hp.nside2npix(nside_out)
-	# maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
+	maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
 	varmaps = ['', '', 'std_H2_17_sm1deg_nside64.fits', 'std_H2_19_sm1deg_nside64.fits', 'std_H3_11_sm1deg_nside64.fits', 'std_H3_13_sm1deg_nside64.fits', 'std_H4_17_sm1deg_nside64.fits', 'std_H4_19_sm1deg_nside64.fits']
-	maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
+	# maps = [str(nside)+'_60.00smoothed_'+prefix+'1_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'1_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'2_19.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_11.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.00smoothed_'+prefix+'3_13.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_17.0_512_'+date+'_mKCMBunits.fits',str(nside)+'_60.0smoothed_'+prefix+'4_19.0_512_'+date+'_mKCMBunits.fits']
 
 	if indirectory == '':
 		indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
@@ -224,7 +224,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	qmap_311 = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 	umap_311 = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
 	if use_variance:
-		if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr:
+		if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr or 'nov2020' in datestr:
 			if 'FG_QJT' in maps[i]:
 				var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 				print(np.shape(var))
@@ -422,7 +422,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.savefig(outdirectory+'test_'+maps[i]+'_U.png')
 		# Get the variance maps
 		if use_variance:
-			if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr:
+			if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr or 'nov2020' in datestr:
 				if 'FG_QJT' in maps[i]:
 					var = hp.read_map(indirectory+maps[i].replace('FG_QJT','FG_wei_QJT'),field=None)
 					var_q = 1.0/var[1]
@@ -451,6 +451,10 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			# offsetmap = run_offset_map(qmap_311,qmap,np.sqrt(var_q),sigmamap_x=np.sqrt(var_q_311),nsidemask=nsidemask,nside=8,outputtt=outdirectory+'ttplots/tt_311_'+maps[i]+'_Q_3_',outputmap=outdirectory+'_offset_Q311_'+maps[i]+'.png')
 
 			# Check for offsets vs. the 11GHz maps
+			print(len(qmap_311))
+			print(len(qmap))
+			print(len(var_q))
+			print(len(var_q_311))
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=np.sqrt(var_q_311[quickmask==1]))
 		else:
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png')
