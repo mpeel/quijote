@@ -1,3 +1,7 @@
+## THIS IS DEPRECATED
+## USE smoothmaps/run_smoothmaps_quijote.py instead
+## MP, 22 March 2021
+
 from astrocode.fitspectrum.smoothmap import smoothmap
 import numpy as np
 import healpy as hp

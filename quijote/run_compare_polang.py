@@ -15,7 +15,7 @@ for c in mcolors.TABLEAU_COLORS:
 for c in mcolors.CSS4_COLORS:
 	colours.append(c)
 
-print(colours)
+# print(colours)
 # exit()
 
 # compare_polang(prefix='mfi',date='201905')
@@ -34,7 +34,9 @@ print(colours)
 # compare_polang(prefix='mfi_recalib7',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi_recalib8',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi_recalib9',date='202004b',datestr='apr2020b')
-compare_polang(prefix='mfi',date='202011',datestr='nov2020')
+# compare_polang(prefix='mfi',date='202011',datestr='nov2020')
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False)
 exit()
 
 
