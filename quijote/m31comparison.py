@@ -17,14 +17,18 @@ qfolder = 'quijote_201911'
 qext = 'nov2019'
 qfolder = 'quijote_201905'
 qext = 'may2019'
-map_prefix = '/Users/mpeel/Documents/maps/wmap_planck_smoothed_maps_2015/'
-filenames = ['256_60.00smoothed_wmap9decbeamCMBSmicasub_22.8_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_33.0_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_40.7_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_60.7_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_93.5_512_2013_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_28.4_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_44.1_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_70.4_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_100_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_143_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_217_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_353_2048_2015_mKCMBunits.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_1.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_13.0_1.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_17.0_2.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_19.0_2.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_17.0_4.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_19.0_4.fits']
-freqs = [22.8,33.0,40.7,60.7,93.5,28.4,44.1,70.4,100.0,143.0,217.0,353.0,11.0,13.0,17.0,19.0,11.0,13.0,17.0,19.0]
+qfolder = 'quijote_m31'
+qext = 'm31half2'
+map_prefix = '/Users/mpeel/Documents/maps/'
+# filenames = ['256_60.00smoothed_wmap9decbeamCMBSmicasub_22.8_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_33.0_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_40.7_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_60.7_512_2013_mKCMBunits.fits','256_60.00smoothed_wmap9decbeamCMBSmicasub_93.5_512_2013_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_28.4_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_44.1_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_70.4_1024_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_100_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_143_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_217_2048_2015_mKCMBunits.fits','256_60.00smoothed_PlanckR2fullbeamCMBSmicasub_353_2048_2015_mKCMBunits.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_1.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_13.0_1.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_17.0_2.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_19.0_2.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_17.0_4.fits','../'+qfolder+'/reform/mfi_'+qext+'_map_19.0_4.fits']
+# freqs = [22.8,33.0,40.7,60.7,93.5,28.4,44.1,70.4,100.0,143.0,217.0,353.0,11.0,13.0,17.0,19.0,11.0,13.0,17.0,19.0]
+filenames = [qfolder+'/reform/mfi_'+qext+'_map_11.0_1.fits',qfolder+'/reform/mfi_'+qext+'_map_13.0_1.fits',qfolder+'/reform/mfi_'+qext+'_map_17.0_2.fits',qfolder+'/reform/mfi_'+qext+'_map_19.0_2.fits',qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits',qfolder+'/reform/mfi_'+qext+'_map_11.0_3.fits',qfolder+'/reform/mfi_'+qext+'_map_17.0_4.fits',qfolder+'/reform/mfi_'+qext+'_map_19.0_4.fits']
+freqs = [11.0,13.0,17.0,19.0,11.0,13.0,17.0,19.0]
 # quijote_map = '/Users/mpeel/Documents/maps/quijote_201907/quijote_combinedmaps_select_withcov_rfi_jul2019_withcov_rfi_nside512_finalmaskfdec2.fits'
 # quijote_map = '/Users/mpeel/Documents/QUIJOTE/m31/mapsds_iqu_m31_comb_rasters_931td_rgs_nominal_oct2018_ctod_ns512.fits'
 quijote_map = '/Users/mpeel/Documents/QUIJOTE/m31/quijote_combinedmaps_nominal_and_m31_test_rfi_newflags2_may2019_withper5_test_rfi_newflags2_nside512.fits'
-
-outdir = '/Users/mpeel/Documents/QUIJOTE/m31/comparison_zoom_202001/'
+quijote_map = '/Users/mpeel/Documents/maps/quijote_m31/quijote_combinedmaps_nominal_m31_recalib11_withcov_rfi_newflagstat_raw_allatonce5s_jan2021_halfring2_nside512_finalmaskfdec2.fits'
+outdir = '/Users/mpeel/Documents/QUIJOTE/m31/comparison_zoom_202101/'
 
 cbass_map = '/Users/mpeel/Documents/maps/cbass2019/cbass_global8p8deg_swapQU_NIGHT_v28allelsNs_37_noiseCut_masked5pc_G_1024_ol500_lessTol_g_map_g_1deg_0256.fits'
 
@@ -45,7 +49,7 @@ for i in range(0,len(freqs)):
 	mapdata = hp.read_map(map_prefix + filenames[i])
 	print(haperflux(mapdata, freqs[i], res_arcmin, lon, lat, aper_inner_radius, aper_outer_radius1, aper_outer_radius2, units, column=0, dopol=False, nested=False, noise_model=noise_model, abratio=0.7, angle=45.0, silent=False))
 	hp.gnomview(mapdata,rot=[10.68, 41.27],coord=['G','C'],title='M31',reso=2)
-	plt.savefig(outdir+filenames[i].replace('../'+qfolder+'/reform/','')+'_m31.pdf')
+	plt.savefig(outdir+filenames[i].replace(qfolder+'/reform/','')+'_m31.pdf')
 	plt.close()
 	plt.clf()
 

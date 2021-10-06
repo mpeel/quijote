@@ -31,22 +31,22 @@ def linfit3(param, x):
 # Debiasing, code from Federica
 # Equation 19 of https://arxiv.org/pdf/1410.4436.pdf
 def debias_p_mas(Q, U, sigmaQ, sigmaU):
-    p = np.sqrt(Q**2+U**2)
-    b = np.sqrt((Q**2+sigmaU**2+U**2+sigmaQ**2))/p
-    pmas = p-b**2*((1.-np.exp(-p**2/b**2))/2*p)
-    sigmap = np.sqrt(0.5*(sigmaQ**2+sigmaU**2))
-    SN = (pmas/sigmap > 3.8)
-    print(SN)
-    return(pmas, sigmap, SN)
+	p = np.sqrt(Q**2+U**2)
+	b = np.sqrt((Q**2+sigmaU**2+U**2+sigmaQ**2))/p
+	pmas = p-b**2*((1.-np.exp(-p**2/b**2))/2*p)
+	sigmap = np.sqrt(0.5*(sigmaQ**2+sigmaU**2))
+	SN = (pmas/sigmap > 3.8)
+	# print(SN)
+	return(pmas, sigmap, SN)
 
 # Debiasing, code from Federica
 def debias_p_as(Q, U, sigmaQ, sigmaU):
-    p = np.sqrt(Q**2+U**2)
-    sigmap = np.sqrt((sigmaQ*Q)**2+(sigmaU*U)**2/(Q**2+U**2))
-    pmas = 0.5*(p+np.sqrt(p**2-2.*sigmap**2))
-    SN = (pmas/sigmap > 3.8)
-    print(SN)
-    return(pmas, sigmap, SN)
+	p = np.sqrt(Q**2+U**2)
+	sigmap = np.sqrt((sigmaQ*Q)**2+(sigmaU*U)**2/(Q**2+U**2))
+	pmas = 0.5*(p+np.sqrt(p**2-2.*sigmap**2))
+	SN = (pmas/sigmap > 3.8)
+	# print(SN)
+	return(pmas, sigmap, SN)
 
 # Was Q, U, just changed to U, Q -- MP, 4 June 2021
 def calc_polang(Q, U):
@@ -58,6 +58,9 @@ def calc_polang_unc(Q, U, Qerr, Uerr):
 	return unc_map
 
 def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq=False,freq1=0,freq2=0,xlabel='',ylabel='',xyline=False):
+	if len(vals1) == 0 or len(vals2) == 0:
+		print('No data! Aborting')
+		return [[1.0,0.0], [0.0,0.0]]
 	# print(sigma)
 	# Do a fit
 	params = [1.0,0]
@@ -100,7 +103,7 @@ def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq
 			beta = -np.log(param_est[0])/np.log(freq1/freq2)
 			s_beta = sigma_param_est[0]/param_est[0] / np.abs(np.log(freq1/freq2))
 			mesg_fit = mesg_fit + ', beta = ${:5.3f}\pm{:3.2f}$'.format(beta,s_beta)
-			print(beta,s_beta)
+			# print(beta,s_beta)
 		plt.plot(xvals,linfit(xvals,param_est),'g',label="Fit: " + mesg_fit)
 	else:
 		plt.plot(xvals,linfit(xvals,param_est),'g')
@@ -159,7 +162,7 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 
 	return offsetmap
 
-def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True,indirectory='',newformat=False,use_polang_err=True, polang_err_threshold = 2.0,planckmap='npipe',applyoffsets='wmap',outdirectory=''):
+def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True,indirectory='',newformat=False,use_polang_err=True, polang_err_threshold = 2.0,planckmap='npipe',applyoffsets='wmap',outdirectory='',mapprefix='',inputmask='/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',staticmask=False):
 	nside = 512
 	npix = hp.nside2npix(nside)
 	nside_out=64
@@ -167,7 +170,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 
 	# Map location
 	if newformat:
-		maps = ['64_60.0smoothed_QUIJOTEMFI1_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI1_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2_19.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4_19.0_2021_mKCMBunits.fits']
+		maps = ['64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_19.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_19.0_2021_mKCMBunits.fits']
 		varmaps = ['', '', '', '', '', '', '', '']
 	else:
 		maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
@@ -178,18 +181,23 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
 		outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
 	if outdirectory == '':
-		outdirectory = indirectory+'/analyse/'
+		outdirectory = indirectory+'/analyse'+mapprefix
 		if not newformat:
 			indirectory = indirectory + '/reform/'
-	if use_polang_err == 'False':
-		outdirectory += '_all'
+	if use_polang_err == False:
+		outdirectory += '_all/'
 	else:
-		outdirectory += '_'+str(polang_err_threshold)
+		outdirectory += '_'+str(polang_err_threshold)+'/'
+	print(outdirectory)
 	ensure_dir(outdirectory)
 
+	logfile = open(outdirectory+"_results.txt", "w")
+	logfile.write(outdirectory+"\n")
 	nsidemask = np.asarray(nside_mask(nside_out,8))
 	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
 	plt.savefig(outdirectory+'_nside_mask.png')
+	plt.clf()
+	plt.close()
 
 	nummaps = len(maps)
 	freqs = [11,13,16.7,18.7,11.1,12.9,17,19]
@@ -197,7 +205,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	index = -3.0
 	wmap_freq = 22.8
 	planck_freq = 28.4
-	commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',field=None)
+	commonmask = hp.read_map(inputmask,field=None)
 	# commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_satband_nside512.fits',field=None)
 	# commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
 	commonmask = hp.ud_grade(commonmask,nside_out,order_in='RING',order_out='RING')
@@ -252,6 +260,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	polang_map_11 = calc_polang(qmap_311[:],umap_311[:])
 	hp.mollview(polang_map_11,cmap=plt.get_cmap('jet'))
 	plt.savefig(outdirectory+'polang_map_mfi11.png')
+	plt.clf()
+	plt.close()
 	if use_variance:
 		polang_unc_map_11 = calc_polang_unc(qmap_311,umap_311,np.sqrt(var_q_311),np.sqrt(var_u_311))
 		hp.mollview(polang_unc_map_11,cmap=plt.get_cmap('jet'),max=polang_err_threshold)
@@ -264,17 +274,20 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.close()
 
 	# define the mask
-	quickmask = np.zeros(npix_out)
-	if use_threshold:
-		quickmask[np.sqrt(qmap_311**2+umap_311**2) > threshold] = 1
-		quickmask[np.sqrt(qmap_311**2+umap_311**2) > threshold2] = 0
-	elif use_sn:
-		quickmask[np.sqrt((qmap_311/np.sqrt(var_q_311))**2+(umap_311/np.sqrt(var_u_311))**2) > sn_ratio] = 1
-	elif use_polang_err:
-		quickmask[polang_unc_map_11 < polang_err_threshold] = 1
+	if staticmask:
+		quickmask = commonmask.copy()
 	else:
-		quickmask[commonmask==1] = 1
-	quickmask[commonmask == 0] = 0
+		quickmask = np.zeros(npix_out)
+		if use_threshold:
+			quickmask[np.sqrt(qmap_311**2+umap_311**2) > threshold] = 1
+			quickmask[np.sqrt(qmap_311**2+umap_311**2) > threshold2] = 0
+		elif use_sn:
+			quickmask[np.sqrt((qmap_311/np.sqrt(var_q_311))**2+(umap_311/np.sqrt(var_u_311))**2) > sn_ratio] = 1
+		elif use_polang_err:
+			quickmask[polang_unc_map_11 < polang_err_threshold] = 1
+		else:
+			quickmask[commonmask==1] = 1
+		quickmask[commonmask == 0] = 0
 
 	# othermask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits')
 	# othermask = hp.ud_grade(othermask,nside_out,order_in='RING',order_out='RING')
@@ -283,6 +296,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# nsidemask = np.multiply(nsidemask,othermask)
 	hp.mollview(nsidemask,cmap=plt.get_cmap('jet'))
 	plt.savefig(outdirectory+'_nside_mask2.png')
+	plt.clf()
+	plt.close()
 
 
 
@@ -328,10 +343,11 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	polang_map_wmap_unc = calc_polang_unc(qmap_wmap[:], umap_wmap[:], qmap_wmap_var[:], umap_wmap_var[:])
 
 	threshold3 = 2.0
-	quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index < -threshold3] = 0
-	quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index > threshold3] = 0
-	quickmask[umap_wmap*(freqs[4]/wmap_freq)**index < -threshold3] = 0
-	quickmask[umap_wmap*(freqs[4]/wmap_freq)**index > threshold3] = 0
+	if not staticmask:
+		quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index < -threshold3] = 0
+		quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index > threshold3] = 0
+		quickmask[umap_wmap*(freqs[4]/wmap_freq)**index < -threshold3] = 0
+		quickmask[umap_wmap*(freqs[4]/wmap_freq)**index > threshold3] = 0
 
 	# Save the mask
 	hp.write_map(outdirectory+'_quickmask.fits',quickmask,overwrite=True)
@@ -390,7 +406,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# print(fit,fiterr)
 	offset_values_Q_planck[i] = fit[1]
 	offset_values_Q_planck_err[i] = fiterr[1]
-	if applyoffsets == 'planck':
+	if applyoffsets == 'planck' and fit[1] != 0.0:
 		qmap_311 = qmap_311 - fit[1]
 
 	if use_variance:
@@ -400,7 +416,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# print(fit,fiterr)
 	offset_values_U_planck[i] = fit[1]
 	offset_values_U_planck_err[i] = fiterr[1]
-	if applyoffsets == 'planck':
+	if applyoffsets == 'planck' and fit[1] != 0.0:
 		umap_311 = umap_311 - fit[1]
 
 	if use_variance:
@@ -410,7 +426,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# print(fit,fiterr)
 	offset_values_Q[i] = fit[1]
 	offset_values_Q_err[i] = fiterr[1]
-	if applyoffsets == 'wmap':
+	if applyoffsets == 'wmap' and fit[1] != 0.0:
 		qmap_311 = qmap_311 - fit[1]
 	if use_variance:
 		fit,fiterr=plot_tt(umap_wmap[quickmask==1]*(freqs[4]/wmap_freq)**index,umap_311[quickmask==1],outdirectory+'tt_311_wmap_U_sigma.png',sigma=np.sqrt(var_u_311[quickmask==1]),sigma_x=np.sqrt(umap_wmap_var[quickmask==1])*(freqs[4]/wmap_freq)**index)
@@ -419,7 +435,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# print(fit,fiterr)
 	offset_values_U[i] = fit[1]
 	offset_values_U_err[i] = fiterr[1]
-	if applyoffsets == 'wmap':
+	if applyoffsets == 'wmap' and fit[1] != 0.0:
 		umap_311 = umap_311 - fit[1]
 	polang_map_11 = calc_polang(qmap_311[:],umap_311[:])
 	if use_variance:
@@ -445,7 +461,11 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# Start running through, skip MFI horn 1
 	for i in range(2,nummaps):
 		# print(maps[i])
-		mapdata = hp.read_map(indirectory+maps[i],field=None)
+		try:
+			mapdata = hp.read_map(indirectory+maps[i],field=None)
+		except:
+			print('No map found! Assuming 0s')
+			mapdata = np.ones((7,len(qmap_311)))*hp.UNSEEN
 		mapdata[mapdata < -1e10] = hp.UNSEEN
 		qmap = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 		umap = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
@@ -457,6 +477,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.savefig(outdirectory+'test_'+maps[i]+'_Q.png')
 		hp.mollview(umap,norm='hist')
 		plt.savefig(outdirectory+'test_'+maps[i]+'_U.png')
+		plt.clf()
+		plt.close()
 		# Get the variance maps
 		if use_variance:
 			if 'nov2019' in datestr or 'mar2020' in datestr or 'apr2020' in datestr or 'nov2020' in datestr:
@@ -501,7 +523,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			fit,fiterr=plot_tt(qmap_311[quickmask==1],qmap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_Q_3.png')
 		# print(fit,fiterr)
 
-		if applyoffsets == 'wmap' or applyoffsets == 'planck':
+		if (applyoffsets == 'wmap' or applyoffsets == 'planck') and fit[1] != 0.0:
 			qmap = qmap-fit[1]
 		if i != 4:
 			offset_values_Q[i] = fit[1]
@@ -515,7 +537,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		else:
 			fit,fiterr=plot_tt(umap_311[quickmask==1],umap[quickmask==1],outdirectory+'tt_311_'+maps[i]+'_U_3.png')
 		# print(fit,fiterr)
-		if applyoffsets == 'wmap' or applyoffsets == 'planck':
+		if (applyoffsets == 'wmap' or applyoffsets == 'planck') and fit[1] != 0.0:
 			umap = umap-fit[1]
 		if i != 4:
 			offset_values_U[i] = fit[1]
@@ -528,6 +550,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		polang2[polang2 > 180.0] = 0.0
 		hp.mollview(polang2)
 		plt.savefig(outdirectory+'test_polang_map_'+maps[i]+'.png')
+		plt.clf()
+		plt.close()
 
 
 
@@ -540,12 +564,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.clf()
 		plt.close()
 
-		hp.gnomview(qmap,reso=15.0)
-		plt.savefig(outdirectory+'galcen_Q_'+maps[i]+'.pdf')
-		hp.gnomview(umap,reso=15.0)
-		plt.savefig(outdirectory+'galcen_U_'+maps[i]+'.pdf')
-		hp.gnomview(polang_map,reso=15.0)
-		plt.savefig(outdirectory+'galcen_ang_'+maps[i]+'.pdf')
+		# hp.gnomview(qmap,reso=15.0)
+		# plt.savefig(outdirectory+'galcen_Q_'+maps[i]+'.pdf')
+		# hp.gnomview(umap,reso=15.0)
+		# plt.savefig(outdirectory+'galcen_U_'+maps[i]+'.pdf')
+		# hp.gnomview(polang_map,reso=15.0)
+		# plt.savefig(outdirectory+'galcen_ang_'+maps[i]+'.pdf')
 
 		polmap_temp = np.sqrt(qmap**2+umap**2)
 		polmap_temp[quickmask==0] = hp.UNSEEN
@@ -582,21 +606,23 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			polang_diff_temp[quickmask==0] = hp.UNSEEN
 			hp.gnomview(polang_diff_temp,reso=15.0,min=-20,max=10,cmap=plt.get_cmap('jet'))
 			plt.savefig(outdirectory+'galcen_diff_11_13.pdf')
+			plt.clf()
+			plt.close()
 
 		elif i == 6:
-			print("Difference at 17GHz:")
-			print(np.median(polang_map[quickmask==1]-polang_map_17[quickmask==1]))
-			print('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_17[quickmask==1])))
-			print('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_17[quickmask==1])))
-			print('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_17[quickmask==1])))
-			print('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_17[quickmask==1])))
-			print('In U median: ' + str(np.median(umap[quickmask==1]/U_17[quickmask==1])))
-			print('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_17[quickmask==1])))
+			logfile.write("Difference at 17GHz:\n")
+			logfile.write(str(np.median(polang_map[quickmask==1]-polang_map_17[quickmask==1]))+"\n")
+			logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_17[quickmask==1]))+"\n")
+			logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_17[quickmask==1]))+"\n")
+			logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_17[quickmask==1]))+"\n")
+			logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_17[quickmask==1]))+"\n")
+			logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_17[quickmask==1]))+"\n")
+			logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_17[quickmask==1]))+"\n")
 
-			print('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_17[quickmask==1]**2))))
-			print('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_17[quickmask==1]**2))))
-			print('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_17[quickmask==1]**2))))
-			print('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_17[quickmask==1]**2))))
+			logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_17[quickmask==1]**2)))+"\n")
+			logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_17[quickmask==1]**2)))+"\n")
+			logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_17[quickmask==1]**2)))+"\n")
+			logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_17[quickmask==1]**2)))+"\n")
 
 			plt.clf()
 			plt.close()
@@ -615,20 +641,20 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			plt.clf()
 			plt.close()
 		elif i == 7:
-			print("Difference at 19GHz:")
-			print(np.median(polang_map[quickmask==1]-polang_map_19[quickmask==1]))
-			print('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_19[quickmask==1])))
-			print('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_19[quickmask==1])))
+			logfile.write("Difference at 19GHz:\n")
+			logfile.write(str(np.median(polang_map[quickmask==1]-polang_map_19[quickmask==1]))+"\n")
+			logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_19[quickmask==1]))+"\n")
+			logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_19[quickmask==1]))+"\n")
 
-			print('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_19[quickmask==1])))
-			print('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_19[quickmask==1])))
-			print('In U median: ' + str(np.median(umap[quickmask==1]/U_19[quickmask==1])))
-			print('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_19[quickmask==1])))
+			logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_19[quickmask==1]))+"\n")
+			logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_19[quickmask==1]))+"\n")
+			logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_19[quickmask==1]))+"\n")
+			logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_19[quickmask==1]))+"\n")
 
-			print('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_19[quickmask==1]**2))))
-			print('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_19[quickmask==1]**2))))
-			print('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_19[quickmask==1]**2))))
-			print('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_19[quickmask==1]**2))))
+			logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_19[quickmask==1]**2)))+"\n")
+			logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_19[quickmask==1]**2)))+"\n")
+			logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_19[quickmask==1]**2)))+"\n")
+			logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_19[quickmask==1]**2)))+"\n")
 			plt.clf()
 			plt.close()
 			fit,fiterr=plot_tt(Q_19[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_19.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_19_unc[quickmask==1])
@@ -651,9 +677,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		diff_to_11_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_11[quickmask==1])
 		# print(diff_to_11[i])
 		if use_variance:
-			vals = np.average(polang_map[quickmask==1]-polang_map_11[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_11[quickmask==1]**2.0),returned=True)
-			diff_to_11_2[i] = vals[0]
-			diff_to_11_2_std[i] = np.sqrt(1.0/vals[1])
+			try:
+				vals = np.average(polang_map[quickmask==1]-polang_map_11[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_11[quickmask==1]**2.0),returned=True)
+				diff_to_11_2[i] = vals[0]
+				diff_to_11_2_std[i] = np.sqrt(1.0/vals[1])
+			except:
+				vals = [0.0, 0.0]
 		if i != 4:
 			hist = np.histogram(polang_map[quickmask==1]-polang_map_11[quickmask==1], bins=np.arange(0.0,90.0,1.0))
 			plt.xlim(0,90)
@@ -670,9 +699,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		diff_to_planckwmap_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1])
 		# print(diff_to_planckwmap[i])
 		if use_variance:
-			vals = np.average(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planckwmap_unc[quickmask==1]**2),returned=True)
-			diff_to_planckwmap_2[i] = vals[0]
-			diff_to_planckwmap_2_std[i] = np.sqrt(1.0/vals[1])
+			try:
+				vals = np.average(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planckwmap_unc[quickmask==1]**2),returned=True)
+				diff_to_planckwmap_2[i] = vals[0]
+				diff_to_planckwmap_2_std[i] = np.sqrt(1.0/vals[1])
+			except:
+				vals = [0.0, 0.0]
 		hist = np.histogram(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1], bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between WMAP+Planck and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
@@ -688,9 +720,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		diff_to_wmap_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_wmap[quickmask==1])
 		# print(diff_to_wmap[i])
 		if use_variance:
-			vals = np.average(polang_map[quickmask==1]-polang_map_wmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_wmap_unc[quickmask==1]**2),returned=True)
-			diff_to_wmap_2[i] = vals[0]
-			diff_to_wmap_2_std[i] = np.sqrt(1.0/vals[1])
+			try:
+				vals = np.average(polang_map[quickmask==1]-polang_map_wmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_wmap_unc[quickmask==1]**2),returned=True)
+				diff_to_wmap_2[i] = vals[0]
+				diff_to_wmap_2_std[i] = np.sqrt(1.0/vals[1])
+			except:
+				vals = [0.0, 0.0]
 		hist = np.histogram(polang_map[quickmask==1]-polang_map_wmap[quickmask==1], bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between WMAPK and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
@@ -706,9 +741,12 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		diff_to_planck_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_planck30[quickmask==1])
 		# print(diff_to_planck[i])
 		if use_variance:
-			vals = np.average(polang_map[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
-			diff_to_planck_2[i] = vals[0]
-			diff_to_planck_2_std[i] = np.sqrt(1.0/vals[1])
+			try:
+				vals = np.average(polang_map[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
+				diff_to_planck_2[i] = vals[0]
+				diff_to_planck_2_std[i] = np.sqrt(1.0/vals[1])
+			except:
+				vals = [0.0, 0.0]
 		hist = np.histogram(polang_map[quickmask==1]-polang_map_planck30[quickmask==1], bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between Planck30 and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
@@ -720,54 +758,57 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.close()
 
 	# print(combhist)
-	print('Offsets in Q and U (x1000):')
+	logfile.write('Offsets in Q and U (x1000):\n')
 	np.set_printoptions(formatter={'float': '{: 0.5f}'.format})
-	print(offset_values_Q[2:]*1000)
-	print(offset_values_U[2:]*1000)
-	print('Uncertainties (x1000):')
-	print(offset_values_Q_err[2:]*1000)
-	print(offset_values_U_err[2:]*1000)
-	print('Planck to 311:')
-	print("{:.2f}".format(offset_values_Q_planck[4]*1000))
-	print("{:.2f}".format(offset_values_U_planck[4]*1000))
-	print("{:.2f}".format(offset_values_Q_planck_err[4]*1000))
-	print("{:.2f}".format(offset_values_U_planck_err[4]*1000))
+	logfile.write(str(offset_values_Q[2:]*1000)+"\n")
+	logfile.write(str(offset_values_U[2:]*1000)+"\n")
+	logfile.write('Uncertainties (x1000):\n')
+	logfile.write(str(offset_values_Q_err[2:]*1000)+"\n")
+	logfile.write(str(offset_values_U_err[2:]*1000)+"\n")
+	logfile.write('Planck to 311:\n')
+	logfile.write("{:.2f}".format(offset_values_Q_planck[4]*1000)+"\n")
+	logfile.write("{:.2f}".format(offset_values_U_planck[4]*1000)+"\n")
+	logfile.write("{:.2f}".format(offset_values_Q_planck_err[4]*1000)+"\n")
+	logfile.write("{:.2f}".format(offset_values_U_planck_err[4]*1000)+"\n")
 	np.set_printoptions(formatter={'float': '{: 0.3f}'.format})
-	print('Diff to 11:')
-	print(diff_to_11[2:])
-	print(diff_to_11_std[2:])
+	logfile.write('Diff to 11:'+"\n")
+	logfile.write(str(diff_to_11[2:])+"\n")
+	logfile.write(str(diff_to_11_std[2:])+"\n")
 	if use_variance:
-		print(diff_to_11_2[2:])
-		print(diff_to_11_2_std[2:])
+		print(str(diff_to_11_2[2:])+"\n")
+		print(str(diff_to_11_2_std[2:])+"\n")
 
-	print('Diff to Planck+WMAP:')
-	print(diff_to_planckwmap[2:])
-	print(diff_to_planckwmap_std[2:])
+	logfile.write('Diff to Planck+WMAP:\n')
+	logfile.write(str(diff_to_planckwmap[2:])+"\n")
+	logfile.write(str(diff_to_planckwmap_std[2:])+"\n")
 	if use_variance:
-		print(diff_to_planckwmap_2[2:])
-		print(diff_to_planckwmap_2_std[2:])
+		logfile.write(str(diff_to_planckwmap_2[2:])+"\n")
+		logfile.write(str(diff_to_planckwmap_2_std[2:])+"\n")
 
-	print('Diff to Planck:')
-	print(diff_to_planck[2:])
-	print(diff_to_planck_std[2:])
+	logfile.write('Diff to Planck:\n')
+	logfile.write(str(diff_to_planck[2:])+"\n")
+	logfile.write(str(diff_to_planck_std[2:])+"\n")
 	if use_variance:
-		print(diff_to_planck_2[2:])
-		print(diff_to_planck_2_std[2:])
+		logfile.write(str(diff_to_planck_2[2:])+"\n")
+		logfile.write(str(diff_to_planck_2_std[2:])+"\n")
 
-	print('Diff to WMAP:')
-	print(diff_to_wmap[2:])
-	print(diff_to_wmap_std[2:])
+	logfile.write('Diff to WMAP:\n')
+	logfile.write(str(diff_to_wmap[2:])+"\n")
+	logfile.write(str(diff_to_wmap_std[2:])+"\n")
 	if use_variance:
-		print(diff_to_wmap_2[2:])
-		print(diff_to_wmap_2_std[2:])
+		logfile.write(str(diff_to_wmap_2[2:])+"\n")
+		logfile.write(str(diff_to_wmap_2_std[2:])+"\n")
 
-	print('Difference between WMAPK and Planck30')
-	print("{:.2f}".format(np.median(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1])) + "+-" + "{:.2f}".format(calc_std_over_n(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1])))
+	logfile.write('Difference between WMAPK and Planck30\n')
+	logfile.write("{:.2f}".format(np.median(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1])) + "+-" + "{:.2f}".format(calc_std_over_n(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1]))+"\n")
 	# print(len(polang_map_wmap[quickmask==1]))
 	if use_variance:
-		vals = np.average(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_map_wmap_unc[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
-		print('Weighted:')
-		print("{:.2f}".format(vals[0]) + "+-" + "{:.2f}".format(np.sqrt(1.0/vals[1])))
+		try:
+			vals = np.average(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_map_wmap_unc[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
+			logfile.write('Weighted:'+"\n")
+			logfile.write("{:.2f}".format(vals[0]) + "+-" + "{:.2f}".format(np.sqrt(1.0/vals[1]))+"\n")
+		except:
+			null = 0
 
 	hist = np.histogram(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1], bins=np.arange(0.0,90.0,1.0))
 	plt.xlim(0,90)
@@ -778,6 +819,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	plt.savefig(outdirectory+'polang_diffplanck_wmap.png')
 	plt.clf()
 	plt.close()
+	logfile.close()
 
 	return [diff_to_wmap[2:], diff_to_wmap_std[2:], diff_to_wmap_2[2:], diff_to_wmap_2_std[2:]]
 

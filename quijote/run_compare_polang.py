@@ -35,7 +35,16 @@ for c in mcolors.CSS4_COLORS:
 # compare_polang(prefix='mfi_recalib8',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi_recalib9',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi',date='202011',datestr='nov2020')
-compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap')
+
+# Compare 2021 with polang_err
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='')
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='_period2')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='_period5')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='
+# _period6')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=0.0,planckmap='npipe',applyoffsets='wmap')
+
+# All sky
 # compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False)
 exit()
 
