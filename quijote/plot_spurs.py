@@ -225,6 +225,11 @@ if 5 in dofigs:
 	plt.savefig(outdir+'fig5_wmap_planck_mfi_U.pdf')
 	plt.clf()
 
+	hp.mollview(mfipw_pol,min=0,max=plotmax*(10.0/mfi_freqs[2])**spectrum,cmap='jet',unit='mK CMB',title='',xsize=1600)#,title='MFI+WMAP+Planck weighted polarised intensity'
+	plt.savefig(outdir+'fig5_wmap_planck_mfi_large.pdf')
+	plt.clf()
+
+
 
 
 exit()

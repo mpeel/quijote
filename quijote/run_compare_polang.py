@@ -36,16 +36,89 @@ for c in mcolors.CSS4_COLORS:
 # compare_polang(prefix='mfi_recalib9',date='202004b',datestr='apr2020b')
 # compare_polang(prefix='mfi',date='202011',datestr='nov2020')
 
+# This was the cross-check from 2020 to 2021 changes.
+# compare_polang(prefix='mfi',date='202011',datestr='nov2020',indirectory='/Volumes/Toshiba5TB2/maps/quijote_202011/')
+# exit()
+
 # Compare 2021 with polang_err
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets=False,mapprefix='_period2')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets=False,mapprefix='_period5')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets=False,mapprefix='_period6')
+
 # compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='')
-compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='_period2')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='_period2')
 # compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='_period5')
 # compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',mapprefix='
 # _period6')
 # compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,polang_err_threshold=0.0,planckmap='npipe',applyoffsets='wmap')
 
 # All sky
-# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff')
+# OLD - with offsets
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets='planck',outextraext='npipe')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets='planck',outextraext='2018')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets='planck',outextraext='2015')
+
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets=False,outextraext='2deg_npipe')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='2018',applyoffsets=False,outextraext='2deg_2018')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='2015',applyoffsets=False,outextraext='2deg_2015')
+#
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=3.0,planckmap='npipe',applyoffsets=False,outextraext='3deg_npipe')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=3.0,planckmap='2018',applyoffsets=False,outextraext='3deg_2018')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=3.0,planckmap='2015',applyoffsets=False,outextraext='3deg_2015')
+#
+#
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=5.0,planckmap='npipe',applyoffsets=False,outextraext='5deg_npipe')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=5.0,planckmap='2018',applyoffsets=False,outextraext='5deg_2018')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=5.0,planckmap='2015',applyoffsets=False,outextraext='5deg_2015')
+
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='wmap',outextraext='wmap')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='npipe',applyoffsets='planck',outextraext='npipe')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='2018',applyoffsets='planck',outextraext='2018')
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=True,polang_err_threshold=2.0,planckmap='2015',applyoffsets='planck',outextraext='2015')
+
+# With static masks
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_1.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask1_m2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask1_m2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask1_m2',staticmask=True,inputmask=inputmask)
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_2.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask2_w2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask2_m2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask2_m2',staticmask=True,inputmask=inputmask)
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_3.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask3_m2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask3_m2',staticmask=True,inputmask=inputmask)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask3_m2',staticmask=True,inputmask=inputmask)
+
+# With static masks and simulations
+inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_1.fits'
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask1_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask1_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask1_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_2.fits'
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_3.fits'
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask3_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask3_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask3_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_1.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask1_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask1_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask1_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_2.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask2_w2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask2_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask2_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# inputmask='/Users/mpeel/Documents/maps/quijote_masks/masc_polangle_3.fits'
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='npipe',applyoffsets=False,outextraext='wmap_npipe_nooff_mask3_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2018',applyoffsets=False,outextraext='wmap_2018_nooff_mask3_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+# compare_polang(prefix='mfi',date='202103',datestr='apr2021',newformat=True,indirectory='/Users/mpeel/Documents/maps/quijote_202103_tqu_v1.5_noise_v1.0_newwf/',use_polang_err=False,planckmap='2015',applyoffsets=False,outextraext='wmap_2015_nooff_mask3_m2_sim',staticmask=True,inputmask=inputmask,simnoise=True)
+
 exit()
 
 

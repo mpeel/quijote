@@ -49,13 +49,19 @@ def debias_p_as(Q, U, sigmaQ, sigmaU):
 	return(pmas, sigmap, SN)
 
 # Was Q, U, just changed to U, Q -- MP, 4 June 2021
+# Subsequently changed to -U, Q -- MP, October 2021
 def calc_polang(Q, U):
-	return 0.5*np.arctan2(U, Q) * 180 / np.pi
+	return 0.5*np.arctan2(-U, Q) * 180 / np.pi
 
 def calc_polang_unc(Q, U, Qerr, Uerr):
 	unc_map = np.sqrt((Qerr**2)*(-0.5*U/(Q**2.0+U**2.0))**2.0 + (Uerr**2)*(-0.5*Q/(Q**2.0+U**2.0))**2.0) * 180 / np.pi
 	unc_map[~np.isfinite(unc_map)] = 1000.0
 	return unc_map
+
+# Required to handle points around +- 90°, see Alberto email 19 October 2021
+def dodiff(map1, map2):
+	# return np.arctan(np.tan((map1-map2)*np.pi/180.0))*(180.0/np.pi)
+	return 0.5 * np.arctan(np.tan(2*(map1-map2)*np.pi/180.0))*(180.0/np.pi)
 
 def plot_tt(vals1,vals2,outputname,sigma=np.empty(0),sigma_x=np.empty(0),leastsq=False,freq1=0,freq2=0,xlabel='',ylabel='',xyline=False):
 	if len(vals1) == 0 or len(vals2) == 0:
@@ -162,7 +168,7 @@ def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputt
 
 	return offsetmap
 
-def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True,indirectory='',newformat=False,use_polang_err=True, polang_err_threshold = 2.0,planckmap='npipe',applyoffsets='wmap',outdirectory='',mapprefix='',inputmask='/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',staticmask=False):
+def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=True,indirectory='',newformat=False,use_polang_err=True, polang_err_threshold = 5.0,planckmap='npipe',applyoffsets='wmap',outdirectory='',mapprefix='',inputmask='/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_lowdec_nside512.fits',staticmask=False,outextraext='',simnoise=False):
 	nside = 512
 	npix = hp.nside2npix(nside)
 	nside_out=64
@@ -170,18 +176,22 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 
 	# Map location
 	if newformat:
-		maps = ['64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_19.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_19.0_2021_mKCMBunits.fits']
+		if simnoise:
+			maps = ['64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_11.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_13.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_17.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_19.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_11.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_13.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_17.0_2021simnoise_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_19.0_2021simnoise_mKCMBunits.fits']
+		else:
+			maps = ['64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI1'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI2'+mapprefix+'_19.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_11.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI3'+mapprefix+'_13.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_17.0_2021_mKCMBunits.fits','64_60.0smoothed_QUIJOTEMFI4'+mapprefix+'_19.0_2021_mKCMBunits.fits']
 		varmaps = ['', '', '', '', '', '', '', '']
 	else:
 		maps = [prefix+'_'+datestr+'_mapsmth_11.0_1.fits',prefix+'_'+datestr+'_mapsmth_13.0_1.fits',prefix+'_'+datestr+'_mapsmth_17.0_2.fits',prefix+'_'+datestr+'_mapsmth_19.0_2.fits',prefix+'_'+datestr+'_mapsmth_11.0_3.fits',prefix+'_'+datestr+'_mapsmth_13.0_3.fits',prefix+'_'+datestr+'_mapsmth_17.0_4.fits',prefix+'_'+datestr+'_mapsmth_19.0_4.fits']
 		varmaps = ['', '', 'std_H2_17_sm1deg_nside64.fits', 'std_H2_19_sm1deg_nside64.fits', 'std_H3_11_sm1deg_nside64.fits', 'std_H3_13_sm1deg_nside64.fits', 'std_H4_17_sm1deg_nside64.fits', 'std_H4_19_sm1deg_nside64.fits']
-
+	print(maps)
+	exit()
 	# Directories
 	if indirectory == '':
 		indirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/reform/'
 		outdirectory = '/Users/mpeel/Documents/maps/quijote_'+date+'/analyse/'
 	if outdirectory == '':
-		outdirectory = indirectory+'/analyse'+mapprefix
+		outdirectory = indirectory+'/analyse'+mapprefix+outextraext
 		if not newformat:
 			indirectory = indirectory + '/reform/'
 	if use_polang_err == False:
@@ -205,6 +215,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	index = -3.0
 	wmap_freq = 22.8
 	planck_freq = 28.4
+	print(inputmask)
 	commonmask = hp.read_map(inputmask,field=None)
 	# commonmask = hp.read_map('/Users/mpeel/Documents/maps/quijote_masks/mask_quijote_ncp_satband_nside512.fits',field=None)
 	# commonmask = hp.read_map(outdirectory+'mfi_commonmask.fits',field=None)
@@ -231,7 +242,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 				var_q_311 = hp.ud_grade(var_q_311, nside_out, power=2)
 				var_u_311 = hp.ud_grade(var_u_311, nside_out, power=2)
 			elif varmaps[i] != '':
-				var = hp.read_map('/Users/mpeel/Documents/maps/quijote_201911/noise/'+varmaps[i],field=None)
+				var = hp.read_map('/Volumes/Toshiba5TB2/maps/quijote_201911/noise/'+varmaps[i],field=None)
 				var_q_311 = var[1].copy()**2
 				var_u_311 = var[2].copy()**2
 			else:
@@ -342,7 +353,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	polang_map_wmap = calc_polang(qmap_wmap[:],umap_wmap[:])
 	polang_map_wmap_unc = calc_polang_unc(qmap_wmap[:], umap_wmap[:], qmap_wmap_var[:], umap_wmap_var[:])
 
-	threshold3 = 2.0
+	threshold3 = 2.0 # mK
 	if not staticmask:
 		quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index < -threshold3] = 0
 		quickmask[qmap_wmap*(freqs[4]/wmap_freq)**index > threshold3] = 0
@@ -356,10 +367,11 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	plt.clf()
 	plt.close()
 	# exit()
+	testmask = quickmask.copy()
 
 	# mapdata = hp.read_map('/Users/mpeel/Documents/maps/wmap9_planck2018_tqu/512_60.0smoothed_PlanckR3fullbeam_28.4_1024_2018_mKCMBunits.fits',field=None)
 	if planckmap == '2015':
-		mapdata = hp.read_map('/Users/mpeel/Documents/maps/planck2015_tqu_v1.5_noise_v1.0_10k/64_60.0smoothed_PlanckR2fullbeamNoise_28.4_1024_2015_mKCMBunits.fits',field=None)
+		mapdata = hp.read_map('/Users/mpeel/Documents/maps/planck2015_tqu_v1.5_noise_v1.0/64_60.0smoothed_PlanckR2fullbeambpcorrNoise_28.4_256_2015_mKCMBunits.fits',field=None)
 	elif planckmap == '2018':
 		mapdata = hp.read_map('/Users/mpeel/Documents/maps/planck2018_tqu_v1.5_noise_v1.0_10k/64_60.0smoothed_PlanckR3fullbeamNoise_28.4_1024_2018_mKCMBunits.fits',field=None)
 	else:
@@ -461,18 +473,26 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	# Start running through, skip MFI horn 1
 	for i in range(2,nummaps):
 		# print(maps[i])
+		skipthis = False
 		try:
 			mapdata = hp.read_map(indirectory+maps[i],field=None)
 		except:
-			print('No map found! Assuming 0s')
+			print('No map found! Assuming hp.UNSEEN')
+			skipthis = True
 			mapdata = np.ones((7,len(qmap_311)))*hp.UNSEEN
+		if skipthis:
+			continue
 		mapdata[mapdata < -1e10] = hp.UNSEEN
 		qmap = hp.ud_grade(mapdata[1],nside_out,order_in='RING',order_out='RING')*commonmask
 		umap = hp.ud_grade(mapdata[2],nside_out,order_in='RING',order_out='RING')*commonmask
-		quickmask[qmap < -1e10] = 0
-		quickmask[umap < -1e10] = 0
-		qmap[qmap < -1e10] = hp.UNSEEN
-		umap[umap < -1e10] = hp.UNSEEN
+		if i > 3 and not staticmask:
+			quickmask[qmap < -1e10] = 0
+			quickmask[umap < -1e10] = 0
+			qmap[qmap < -1e10] = hp.UNSEEN
+			umap[umap < -1e10] = hp.UNSEEN
+			testmask[qmap == hp.UNSEEN] = 0
+			testmask[umap == hp.UNSEEN] = 0
+
 		hp.mollview(qmap,norm='hist')
 		plt.savefig(outdirectory+'test_'+maps[i]+'_Q.png')
 		hp.mollview(umap,norm='hist')
@@ -489,7 +509,7 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 					var_q = hp.ud_grade(var_q, nside_out, power=0)
 					var_u = hp.ud_grade(var_u, nside_out, power=0)
 				elif varmaps[i] != '':
-					var = hp.read_map('/Users/mpeel/Documents/maps/quijote_201911/noise/'+varmaps[i],field=None)
+					var = hp.read_map('/Volumes/Toshiba5TB2/maps/quijote_201911/noise/'+varmaps[i],field=None)
 					var_q = var[1].copy()**2
 					var_u = var[2].copy()**2
 				else:
@@ -610,81 +630,86 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			plt.close()
 
 		elif i == 6:
-			logfile.write("Difference at 17GHz:\n")
-			logfile.write(str(np.median(polang_map[quickmask==1]-polang_map_17[quickmask==1]))+"\n")
-			logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_17[quickmask==1]))+"\n")
-			logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_17[quickmask==1]))+"\n")
-			logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_17[quickmask==1]))+"\n")
-			logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_17[quickmask==1]))+"\n")
-			logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_17[quickmask==1]))+"\n")
-			logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_17[quickmask==1]))+"\n")
+			try:
+				logfile.write("Difference at 17GHz:\n")
+				logfile.write(str(np.median(dodiff(polang_map[quickmask==1],polang_map_17[quickmask==1])))+"\n")
+				logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_17[quickmask==1]))+"\n")
+				logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_17[quickmask==1]))+"\n")
+				logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_17[quickmask==1]))+"\n")
+				logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_17[quickmask==1]))+"\n")
+				logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_17[quickmask==1]))+"\n")
+				logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_17[quickmask==1]))+"\n")
 
-			logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_17[quickmask==1]**2)))+"\n")
-			logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_17[quickmask==1]**2)))+"\n")
-			logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_17[quickmask==1]**2)))+"\n")
-			logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_17[quickmask==1]**2)))+"\n")
+				logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_17[quickmask==1]**2)))+"\n")
+				logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_17[quickmask==1]**2)))+"\n")
+				logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_17[quickmask==1]**2)))+"\n")
+				logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_17[quickmask==1]**2)))+"\n")
 
-			plt.clf()
-			plt.close()
-			fit,fiterr=plot_tt(Q_17[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_17.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_17_unc[quickmask==1])
-			fit,fiterr=plot_tt(U_17[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_17.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_17_unc[quickmask==1])
-
-			# if use_variance:
-				# print(np.average(polang_map[quickmask==1]-polang_map_17[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_17[quickmask==1]**2.0)))
-			hist = np.histogram(polang_map[quickmask==1]-polang_map_17[quickmask==1], bins=np.arange(0.0,90.0,1.0))
-			plt.xlim(0,90)
-			plt.title('Difference between 17GHz channels')
-			plt.xlabel('Angle difference [deg]')
-			plt.ylabel('Count')
-			plt.plot(hist[1][:-1],hist[0])
-			plt.savefig(outdirectory+'polang_diff17.png')
-			plt.clf()
-			plt.close()
+				fit,fiterr=plot_tt(Q_17[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_17.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_17_unc[quickmask==1])
+				fit,fiterr=plot_tt(U_17[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_17.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_17_unc[quickmask==1])
+				plt.clf()
+				plt.close()
+				# if use_variance:
+					# print(np.average(polang_map[quickmask==1]-polang_map_17[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_17[quickmask==1]**2.0)))
+				hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_17[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
+				plt.xlim(0,90)
+				plt.title('Difference between 17GHz channels')
+				plt.xlabel('Angle difference [deg]')
+				plt.ylabel('Count')
+				plt.plot(hist[1][:-1],hist[0])
+				plt.savefig(outdirectory+'polang_diff17.png')
+				plt.clf()
+				plt.close()
+			except:
+				null = 0
 		elif i == 7:
-			logfile.write("Difference at 19GHz:\n")
-			logfile.write(str(np.median(polang_map[quickmask==1]-polang_map_19[quickmask==1]))+"\n")
-			logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_19[quickmask==1]))+"\n")
-			logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_19[quickmask==1]))+"\n")
+			try:
+				logfile.write("Difference at 19GHz:\n")
+				logfile.write(str(np.median(dodiff(polang_map[quickmask==1],polang_map_19[quickmask==1])))+"\n")
+				logfile.write('In amplitude median: ' + str(np.median(polmap_temp[quickmask==1]/polmap_19[quickmask==1]))+"\n")
+				logfile.write('In amplitude sum: ' + str(np.sum(polmap_temp[quickmask==1])/np.sum(polmap_19[quickmask==1]))+"\n")
 
-			logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_19[quickmask==1]))+"\n")
-			logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_19[quickmask==1]))+"\n")
-			logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_19[quickmask==1]))+"\n")
-			logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_19[quickmask==1]))+"\n")
+				logfile.write('In Q median: ' + str(np.median(qmap[quickmask==1]/Q_19[quickmask==1]))+"\n")
+				logfile.write('In Q sum: ' + str(np.sum(qmap[quickmask==1])/np.sum(Q_19[quickmask==1]))+"\n")
+				logfile.write('In U median: ' + str(np.median(umap[quickmask==1]/U_19[quickmask==1]))+"\n")
+				logfile.write('In U sum: ' + str(np.sum(umap[quickmask==1])/np.sum(U_19[quickmask==1]))+"\n")
 
-			logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_19[quickmask==1]**2)))+"\n")
-			logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_19[quickmask==1]**2)))+"\n")
-			logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_19[quickmask==1]**2)))+"\n")
-			logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_19[quickmask==1]**2)))+"\n")
-			plt.clf()
-			plt.close()
-			fit,fiterr=plot_tt(Q_19[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_19.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_19_unc[quickmask==1])
-			fit,fiterr=plot_tt(U_19[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_19.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_19_unc[quickmask==1])
+				logfile.write('In Q median: ' + str(np.sqrt(np.median(qmap[quickmask==1]**2/Q_19[quickmask==1]**2)))+"\n")
+				logfile.write('In Q sum: ' + str(np.sqrt(np.sum(qmap[quickmask==1]**2)/np.sum(Q_19[quickmask==1]**2)))+"\n")
+				logfile.write('In U median: ' + str(np.sqrt(np.median(umap[quickmask==1]**2/U_19[quickmask==1]**2)))+"\n")
+				logfile.write('In U sum: ' + str(np.sqrt(np.sum(umap[quickmask==1]**2)/np.sum(U_19[quickmask==1]**2)))+"\n")
+				plt.clf()
+				plt.close()
+				fit,fiterr=plot_tt(Q_19[quickmask==1],qmap[quickmask==1],outdirectory+'tt_Qdiff_19.png',sigma=np.sqrt(var_q[quickmask==1]),sigma_x=Q_19_unc[quickmask==1])
+				fit,fiterr=plot_tt(U_19[quickmask==1],umap[quickmask==1],outdirectory+'tt_Udiff_19.png',sigma=np.sqrt(var_u[quickmask==1]),sigma_x=U_19_unc[quickmask==1])
 
 
-			# if use_variance:
-				# print(np.average(polang_map[quickmask==1]-polang_map_19[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_19[quickmask==1]**2.0)))
-			hist = np.histogram(polang_map[quickmask==1]-polang_map_19[quickmask==1], bins=np.arange(0.0,90.0,1.0))
-			plt.xlim(0,90)
-			plt.title('Difference between 19GHz channels')
-			plt.xlabel('Angle difference [deg]')
-			plt.ylabel('Count')
-			plt.plot(hist[1][:-1],hist[0])
-			plt.savefig(outdirectory+'polang_diff19.png')
-			plt.clf()
-			plt.close()
+				# if use_variance:
+					# print(np.average(polang_map[quickmask==1]-polang_map_19[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_19[quickmask==1]**2.0)))
+				hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_19[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
+				plt.xlim(0,90)
+				plt.title('Difference between 19GHz channels')
+				plt.xlabel('Angle difference [deg]')
+				plt.ylabel('Count')
+				plt.plot(hist[1][:-1],hist[0])
+				plt.savefig(outdirectory+'polang_diff19.png')
+				plt.clf()
+				plt.close()
+			except:
+				null = 0
 
-		diff_to_11[i] = np.median(polang_map[quickmask==1]-polang_map_11[quickmask==1])
-		diff_to_11_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_11[quickmask==1])
+		diff_to_11[i] = np.median(dodiff(polang_map[quickmask==1],polang_map_11[quickmask==1]))
+		diff_to_11_std[i] = calc_std_over_n(dodiff(polang_map[quickmask==1],polang_map_11[quickmask==1]))
 		# print(diff_to_11[i])
 		if use_variance:
 			try:
-				vals = np.average(polang_map[quickmask==1]-polang_map_11[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_11[quickmask==1]**2.0),returned=True)
+				vals = np.average(dodiff(polang_map[quickmask==1],polang_map_11[quickmask==1]),weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_unc_map_11[quickmask==1]**2.0),returned=True)
 				diff_to_11_2[i] = vals[0]
 				diff_to_11_2_std[i] = np.sqrt(1.0/vals[1])
 			except:
 				vals = [0.0, 0.0]
 		if i != 4:
-			hist = np.histogram(polang_map[quickmask==1]-polang_map_11[quickmask==1], bins=np.arange(0.0,90.0,1.0))
+			hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_11[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
 			plt.xlim(0,90)
 			plt.title('Difference between 11GHz and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
 			plt.xlabel('Angle difference [deg]')
@@ -695,17 +720,17 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 			plt.close()
 
 		# print('Compare to Planck+WMAP:')
-		diff_to_planckwmap[i] = np.median(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1])
-		diff_to_planckwmap_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1])
+		diff_to_planckwmap[i] = np.median(dodiff(polang_map[quickmask==1],polang_map_planckwmap[quickmask==1]))
+		diff_to_planckwmap_std[i] = calc_std_over_n(dodiff(polang_map[quickmask==1],polang_map_planckwmap[quickmask==1]))
 		# print(diff_to_planckwmap[i])
 		if use_variance:
 			try:
-				vals = np.average(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planckwmap_unc[quickmask==1]**2),returned=True)
+				vals = np.average(dodiff(polang_map[quickmask==1],polang_map_planckwmap[quickmask==1]),weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planckwmap_unc[quickmask==1]**2),returned=True)
 				diff_to_planckwmap_2[i] = vals[0]
 				diff_to_planckwmap_2_std[i] = np.sqrt(1.0/vals[1])
 			except:
 				vals = [0.0, 0.0]
-		hist = np.histogram(polang_map[quickmask==1]-polang_map_planckwmap[quickmask==1], bins=np.arange(0.0,90.0,1.0))
+		hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_planckwmap[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between WMAP+Planck and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
 		plt.xlabel('Angle difference [deg]')
@@ -716,17 +741,17 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.close()
 
 		# print('Compare to WMAP:')
-		diff_to_wmap[i] = np.median(polang_map[quickmask==1]-polang_map_wmap[quickmask==1])
-		diff_to_wmap_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_wmap[quickmask==1])
+		diff_to_wmap[i] = np.median(dodiff(polang_map[quickmask==1],polang_map_wmap[quickmask==1]))
+		diff_to_wmap_std[i] = calc_std_over_n(dodiff(polang_map[quickmask==1],polang_map_wmap[quickmask==1]))
 		# print(diff_to_wmap[i])
 		if use_variance:
 			try:
-				vals = np.average(polang_map[quickmask==1]-polang_map_wmap[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_wmap_unc[quickmask==1]**2),returned=True)
+				vals = np.average(dodiff(polang_map[quickmask==1],polang_map_wmap[quickmask==1]),weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_wmap_unc[quickmask==1]**2),returned=True)
 				diff_to_wmap_2[i] = vals[0]
 				diff_to_wmap_2_std[i] = np.sqrt(1.0/vals[1])
 			except:
 				vals = [0.0, 0.0]
-		hist = np.histogram(polang_map[quickmask==1]-polang_map_wmap[quickmask==1], bins=np.arange(0.0,90.0,1.0))
+		hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_wmap[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between WMAPK and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
 		plt.xlabel('Angle difference [deg]')
@@ -737,17 +762,17 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		plt.close()
 
 		# print('Compare to Planck:')
-		diff_to_planck[i] = np.median(polang_map[quickmask==1]-polang_map_planck30[quickmask==1])
-		diff_to_planck_std[i] = calc_std_over_n(polang_map[quickmask==1]-polang_map_planck30[quickmask==1])
+		diff_to_planck[i] = np.median(dodiff(polang_map[quickmask==1],polang_map_planck30[quickmask==1]))
+		diff_to_planck_std[i] = calc_std_over_n(dodiff(polang_map[quickmask==1],polang_map_planck30[quickmask==1]))
 		# print(diff_to_planck[i])
 		if use_variance:
 			try:
-				vals = np.average(polang_map[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
+				vals = np.average(dodiff(polang_map[quickmask==1],polang_map_planck30[quickmask==1]),weights=1.0/(polang_unc_map[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
 				diff_to_planck_2[i] = vals[0]
 				diff_to_planck_2_std[i] = np.sqrt(1.0/vals[1])
 			except:
 				vals = [0.0, 0.0]
-		hist = np.histogram(polang_map[quickmask==1]-polang_map_planck30[quickmask==1], bins=np.arange(0.0,90.0,1.0))
+		hist = np.histogram(dodiff(polang_map[quickmask==1],polang_map_planck30[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
 		plt.xlim(0,90)
 		plt.title('Difference between Planck30 and ' + str(freqs[i]) + 'GHz (' + instrument[i] + ')')
 		plt.xlabel('Angle difference [deg]')
@@ -775,8 +800,8 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	logfile.write(str(diff_to_11[2:])+"\n")
 	logfile.write(str(diff_to_11_std[2:])+"\n")
 	if use_variance:
-		print(str(diff_to_11_2[2:])+"\n")
-		print(str(diff_to_11_2_std[2:])+"\n")
+		logfile.write(str(diff_to_11_2[2:])+"\n")
+		logfile.write(str(diff_to_11_2_std[2:])+"\n")
 
 	logfile.write('Diff to Planck+WMAP:\n')
 	logfile.write(str(diff_to_planckwmap[2:])+"\n")
@@ -800,17 +825,17 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 		logfile.write(str(diff_to_wmap_2_std[2:])+"\n")
 
 	logfile.write('Difference between WMAPK and Planck30\n')
-	logfile.write("{:.2f}".format(np.median(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1])) + "+-" + "{:.2f}".format(calc_std_over_n(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1]))+"\n")
+	logfile.write("{:.2f}".format(np.median(dodiff(polang_map_wmap[quickmask==1],polang_map_planck30[quickmask==1]))) + "+-" + "{:.2f}".format(calc_std_over_n(dodiff(polang_map_wmap[quickmask==1],polang_map_planck30[quickmask==1])))+"\n")
 	# print(len(polang_map_wmap[quickmask==1]))
 	if use_variance:
 		try:
-			vals = np.average(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1],weights=1.0/(polang_map_wmap_unc[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
+			vals = np.average(dodiff(polang_map_wmap[quickmask==1],polang_map_planck30[quickmask==1]),weights=1.0/(polang_map_wmap_unc[quickmask==1]**2.0+polang_map_planck30_unc[quickmask==1]**2.0),returned=True)
 			logfile.write('Weighted:'+"\n")
 			logfile.write("{:.2f}".format(vals[0]) + "+-" + "{:.2f}".format(np.sqrt(1.0/vals[1]))+"\n")
 		except:
 			null = 0
 
-	hist = np.histogram(polang_map_wmap[quickmask==1]-polang_map_planck30[quickmask==1], bins=np.arange(0.0,90.0,1.0))
+	hist = np.histogram(dodiff(polang_map_wmap[quickmask==1],polang_map_planck30[quickmask==1]), bins=np.arange(0.0,90.0,1.0))
 	plt.xlim(0,90)
 	plt.title('Difference between WMAPK and Planck30')
 	plt.xlabel('Angle difference [deg]')
@@ -820,6 +845,13 @@ def compare_polang(prefix='mfi', date='201905',datestr='may2019',use_variance=Tr
 	plt.clf()
 	plt.close()
 	logfile.close()
+
+	# Save the mask
+	hp.write_map(outdirectory+'_testmask.fits',testmask,overwrite=True)
+	hp.mollview(testmask,norm='hist')
+	plt.savefig(outdirectory+'_testmask.png')
+	plt.clf()
+	plt.close()
 
 	return [diff_to_wmap[2:], diff_to_wmap_std[2:], diff_to_wmap_2[2:], diff_to_wmap_2_std[2:]]
 
