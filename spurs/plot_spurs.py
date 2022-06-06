@@ -10,7 +10,7 @@
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 import matplotlib
 
 # Location of data

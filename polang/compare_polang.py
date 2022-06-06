@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
 from scipy import odr
-from astrocode.utils.astroutils import *
-from astrocode.ttplot.ttplot import *
-from astrocode.ttplot.polfunc import *
+from astrocode.astroutils import *
+from astrocode.ttplot import *
+from astrocode.polfunc import *
 
 def run_offset_map(map1,map2,sigmamap,sigmamap_x=[],nsidemask=[],nside=8,outputtt='temp',outputmap='temp',sigmacut=3.0):
 	offsetmap = np.zeros(hp.nside2npix(nside))

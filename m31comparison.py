@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Do a comparison of M31 from QUIJOTE, Planck and WMAP
-# 
+#
 # Version history:
 #
 # 09-May-2019  M. Peel       Started
@@ -11,7 +11,7 @@ import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
 import astropy.io.fits as fits
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 
 qfolder = 'quijote_201911'
 qext = 'nov2019'
@@ -146,5 +146,3 @@ for i in range(0,nummaps):
 		plt.clf()
 		units='mK_CMB'
 		print(haperflux(newmap/0.9, freqs[i], res_arcmin, lon, lat, aper_inner_radius, aper_outer_radius1, aper_outer_radius2, units, column=0, dopol=False, nested=False, noise_model=noise_model, abratio=0.7, angle=45.0, silent=False))
-
-

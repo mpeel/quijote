@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Do some plots of the polarisation maps from the jack-knifes
-# 
+#
 # Version history:
 #
 # 27-Apr-2019  M. Peel       Started
@@ -10,7 +10,7 @@
 import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 
 prefixes = ['mfi_apr2020b_pwv1', 'mfi_apr2020b_allatonce', 'mfi_apr2020b_altsample1', 'mfi_apr2020b_altsample2', 'mfi_apr2020b_daynight1', 'mfi_apr2020b_daynight2', 'mfi_apr2020b_fivesample1', 'mfi_apr2020b_fivesample2', 'mfi_apr2020b_half1', 'mfi_apr2020b_half2', 'mfi_apr2020b_halfring1', 'mfi_apr2020b_halfring2', 'mfi_apr2020b_period1', 'mfi_apr2020b_period2', 'mfi_apr2020b_period5', 'mfi_apr2020b_period6', 'mfi_apr2020b_pwv2', 'mfi_apr2020b_ring1', 'mfi_apr2020b_ring2', 'mfi_apr2020b_sample1', 'mfi_apr2020b_sample2', 'mfi_apr2020b_tbem1', 'mfi_apr2020b_tbem2', 'mfi_apr2020b_twosample1', 'mfi_apr2020b_twosample2']
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Compare the polarisation angles from simulated maps
-# 
+#
 # Version history:
 #
 # 13-Jul-2020  M. Peel       Started
@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
 from scipy import odr
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 from compare_polang import *
-from astrocode.fitspectrum.spectra import *
+from astrocode.spectra import *
 
 def dodiff(map1, map2):
 	diff = map1-map2

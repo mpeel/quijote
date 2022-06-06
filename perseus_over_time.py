@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Have a quick look at the flux density of Perseus over time
-# 
+#
 # Version history:
 #
 # 30-Apr-2020  M. Peel       Started
@@ -11,7 +11,7 @@ import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
 import astropy.io.fits as fits
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 
 res_arcmin = 60.0
 lon = 159.73

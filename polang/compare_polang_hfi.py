@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Do a quick comparison of the Planck HFI polarisation angles
-# 
+#
 # Version history:
 #
 # 14-Apr-2020  M. Peel       Started
@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize
 from scipy import odr
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 from compare_polang import *
-from astrocode.fitspectrum.spectra import *
+from astrocode.spectra import *
 def dodiff(map1, map2):
 	diff = map1-map2
 	diff[diff < -90] += 180.0

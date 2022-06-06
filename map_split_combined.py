@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Split the maps
-# 
+#
 # Version history:
 #
 # 09-May-2019  M. Peel       Started
@@ -13,7 +13,7 @@ import healpy as hp
 import numpy as np
 import matplotlib.pyplot as plt
 import astropy.io.fits as fits
-from astrocode.fitspectrum.astroutils import *
+from astrocode.astroutils import *
 import os
 
 invert_weights = True
