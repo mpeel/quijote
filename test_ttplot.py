@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 #
 # Do a quick test of polarised tt plots
-# 
+#
 # Version history:
 #
 # 29-Jul-2019  M. Peel       Started
@@ -13,40 +13,8 @@ import matplotlib.pyplot as plt
 from scipy import optimize
 from scipy import odr
 from compare_polang import *
-from astrocode.fitspectrum.smoothnoisemap import noiserealisation
-
-def debias_p_mas(Q, U, sigmaQ, sigmaU):
-	p = np.sqrt(Q**2+U**2)
-	b = np.sqrt((Q*sigmaU)**2+(U*sigmaQ)**2)/p
-	pmas = p-b**2*((1.-np.exp(-p**2/b**2))/(2*p))
-	sigmaa = np.sqrt(0.5*(sigmaQ**2+sigmaU**2))
-	sigmap = np.sqrt((sigmaQ*Q)**2+(sigmaU*U)**2)/p
-	# SN = (pmas/sigmaa > nsigma)
-	#print(SN)
-	return [pmas, sigmap]#, SN)
-
-def debias_p_as(Q, U, sigmaQ, sigmaU):
-	p = np.sqrt(Q**2+U**2)
-	sigmap = np.sqrt((sigmaQ*Q)**2+(sigmaU*U)**2)/p
-	sigmaa = np.sqrt(0.5*(sigmaQ**2+sigmaU**2))
-	mask = np.ones(len(p))
-	mask[p < sigmap] = 0
-	pas = np.zeros(len(p))
-	pas[mask == 1] = np.sqrt(p[mask==1]**2-sigmap[mask==1]**2)
-	# pas[mask == 0] = 0.0
-	# SN = (pas/sigmaa > nsigma)
-	#print(SN)
-	return [pas, sigmap]#, SN)
-
-# def debias_p_as(Q, U, sigmaQ, sigmaU):#rgs
-#     p = np.sqrt(Q**2+U**2)
-#     b = np.sqrt((Q*sigmaU)**2+(U*sigmaQ)**2)/p
-#     sigmap = np.sqrt((U*sigmaU)**2+(Q*sigmaQ)**2)/p
-#     sigmaa = np.sqrt(0.5*(sigmaQ**2+sigmaU**2))
-#     x = p**2-b**2
-#     pas = np.sqrt(x)
-#     # SN = (pas/sigmaa > nsigma)
-#     return pas#, sigmap, SN)
+from smoothmap.smoothnoisemap import noiserealisation
+from astrocode.polfunc import *
 
 nside = 512
 npix = hp.nside2npix(nside)

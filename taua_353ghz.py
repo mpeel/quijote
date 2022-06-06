@@ -1,19 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import healpy as hp
-from astrocode.fitspectrum.astroutils import *
-
-
-def calc_polang(Q, U):
-	return 0.5*np.arctan2(Q, U) * 180 / np.pi
-
-def calc_polang2(Q, U):
-	return 0.5*np.arctan2(-U, Q) * 180 / np.pi
-
-def calc_polang_unc(Q, U, Qerr, Uerr):
-	unc_map = np.sqrt((Qerr**2)*(-0.5*U/(Q**2.0+U**2.0))**2.0 + (Uerr**2)*(-0.5*Q/(Q**2.0+U**2.0))**2.0) * 180 / np.pi
-	unc_map[~np.isfinite(unc_map)] = 1000.0
-	return unc_map
+from astrocode.astroutils import *
 
 # print(calc_polang(10.0,0.0))
 # print(calc_polang2(10.0,0.0))
@@ -65,8 +53,7 @@ for freq in frequencies:
 	plt.legend()
 	plt.savefig('p'+freq+'_tau_radii.png')
 	plt.clf()
-	# angle = calc_polang(fd_q, fd_u)
-	angle = calc_polang2(fd_q, fd_u)
+	angle = calc_polang(fd_q, fd_u)
 	angle[angle>0] = -180.0+angle[angle>0]
 	angle_err = calc_polang_unc(fd_q, fd_u,fd_q_err,fd_u_err)
 	plt.errorbar(radii, angle, yerr=angle_err)
@@ -74,7 +61,7 @@ for freq in frequencies:
 	plt.ylabel('Polarisation angle')
 	plt.savefig('p'+freq+'_tau_angle_radii.png')
 
-	angle = calc_polang2(fd_q-fd_q_5, fd_u-fd_u_5)
+	angle = calc_polang(fd_q-fd_q_5, fd_u-fd_u_5)
 	angle[angle>0] = -180.0+angle[angle>0]
 	angle[angle>90] = np.nan
 	angle[angle<-180] = np.nan
