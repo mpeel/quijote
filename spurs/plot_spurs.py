@@ -12,24 +12,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 from astrocode.astroutils import *
 import matplotlib
+from configure import *
 
 # Location of data
 basedir = '/Users/mpeel/Documents/maps/'
-outdir=basedir+'quijote_202103/spurs/'
+outdir=basedir+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/spurs/'
 
-plancknpipe30 = 'planck2020_tqu_v1.5_noise_v1.0_10k/512_60.0smoothed_PlanckR4fullbeamnodpNoise_28.4_1024_2020_mKCMBunits.fits'
-wmapk9 = 'wmap9_tqu_v1.5_noise_v1.0_10k/512_60.0smoothed_wmap9beamNoise_22.8_512_2013_mKCMBunits.fits'
+## Planck/WMAP
+plancknpipe30 = 'planck2020_tqu_v1.5_noise_v1.0_10k/256_60.0smoothed_PlanckR4fullbeamnodpNoise_28.4_1024_2020_mKCMBunits.fits'
+wmapk9 = 'wmap9_tqu_v1.5_noise_v1.0_10k/256_60.0smoothed_wmap9beamNoise_22.8_512_2013_mKCMBunits.fits'
+planck_wmap_weighted = 'weighted_wmap_planck_qu_tqu_v1.5_noise_v1.0/256_60.0smoothed_wmap9_planck2020_tqu_v1.5_noise_v1.0_-3.1_combine.fits'
+planck_wmap_weighted_2018 = 'weighted_wmap_planck_qu_tqu_v1.5_noise_v1.0/256_60.0smoothed_wmap9_planck2018_tqu_v1.5_noise_v1.0_-3.1_combine.fits'
+planck_wmap_weighted_2015 = 'weighted_wmap_planck_qu_tqu_v1.5_noise_v1.0/256_60.0smoothed_wmap9_planck2015_tqu_v1.5_noise_v1.0_-3.1_combine.fits'
+planck_wmap_weighted_fdec = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted_fdec/wmapplanck_combine.fits'
 
-# need to change to newwf
-
-mfi_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/512_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.0_combine.fits'
-mfi_planck_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/512_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.0_wmapplanck_combine.fits'
-mfi_maps = ['quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI2_17.0_2021_mKCMBunits.fits','quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI2_19.0_2021_mKCMBunits.fits','quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI3_11.0_2021_mKCMBunits.fits','quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI3_13.0_2021_mKCMBunits.fits','quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI4_17.0_2021_mKCMBunits.fits','quijote_202103_tqu_v1.5_noise_v1.0_newwf/512_60.0smoothed_QUIJOTEMFI4_19.0_2021_mKCMBunits.fits']
-
-planck_wmap_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/wmapplanck_combine.fits'
+## MFI
+mfi_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/256_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_combine.fits'
+mfi_planck_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/256_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_wmapplanck_combine.fits'
+mfi_maps = ['quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI2_17.0_2021_mKCMBunits.fits',\
+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI2_19.0_2021_mKCMBunits.fits',\
+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI3_11.0_2021_mKCMBunits.fits',\
+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI3_13.0_2021_mKCMBunits.fits',\
+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI4_17.0_2021_mKCMBunits.fits',\
+'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI4_19.0_2021_mKCMBunits.fits']
+mfi_mask_filename = basedir+'quijote_masks/mask_quijote_ncp_satband_nside512.fits'
+# mfi_mask_filename = basedir+'quijote_201907/weighted/mfi_commonmask.fits'
 
 # Configuration
-
 mfi_freqs = [16.7, 18.7, 11.1, 12.9, 17, 19]
 plotmax_p = 1.5
 plotmax = 0.5
@@ -37,19 +46,21 @@ plotmax_sub = 0.5
 spectrum = -3.0
 fontsize = 18
 reffreq = 10.0
-
+planck_wmap_weighted_reffreq = 28.4
 matplotlib.rcParams.update({'font.size':fontsize})
 
 dofigs = [2]
 dofigs = [1,2,3,4,5]
 
-regions = [['California',160.60,-12.05],['Perseus',160.26,-18.62],['Rhooph',353.05,16.90]]
+regions = get_regions()
 
 # Read in the MFI mask
-mfi_mask = hp.read_map(basedir+'quijote_masks/mask_quijote_ncp_satband_nside512.fits')
+mfi_mask = hp.read_map(mfi_mask_filename)
+mfi_mask = hp.ud_grade(mfi_mask,256)
+mfi_mask[mfi_mask != 1.0] = 0.0
 mfi_mask[:] = 1.0
-# mfi_mask = hp.read_map(basedir+'quijote_201907/weighted/mfi_commonmask.fits')
 
+# Figure 1 WMAP+Planck
 if 1 in dofigs:
 	# WMAP K
 	wmapk9_map = hp.read_map(basedir+wmapk9,field=None)
@@ -66,6 +77,7 @@ if 1 in dofigs:
 	plt.clf()
 	plt.close()
 
+# Figure 2
 if 2 in dofigs:
 	# Weighted MFI map
 	mfiw = hp.read_map(basedir+mfi_weighted,field=None)
@@ -76,14 +88,36 @@ if 2 in dofigs:
 	plt.clf()
 	plt.close()
 
+# Figure 3
 if 3 in dofigs:
 	# Weighted Planck+WMAP map
 	planck_wmap = hp.read_map(basedir+planck_wmap_weighted,field=None)
 	planck_wmap_pol = np.sqrt(planck_wmap[1]**2+planck_wmap[2]**2)
-	hp.mollview(planck_wmap_pol,min=0,max=plotmax_p,cmap='jet',title='',unit='mK CMB')#,title='WMAP+Planck weighted polarised intensity'
+	planck_wmap_pol_rescale = np.sqrt((planck_wmap[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+(planck_wmap[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
+
+	planck_wmap_2018 = hp.read_map(basedir+planck_wmap_weighted_2018,field=None)
+	planck_wmap_pol_2018_rescale = np.sqrt((planck_wmap_2018[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+(planck_wmap_2018[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
+
+	planck_wmap_2015 = hp.read_map(basedir+planck_wmap_weighted_2015,field=None)
+	planck_wmap_pol_2015_rescale = np.sqrt((planck_wmap_2015[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+(planck_wmap_2015[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
+
+	# NB: fdec map is at Nside 512, and is already at 10GHz.
+	planck_wmap_fdec = hp.read_map(basedir+planck_wmap_weighted_fdec,field=None)
+	planck_wmap_fdec = hp.ud_grade(planck_wmap_fdec,nside_out=256)
+	planck_wmap_pol_fdec_rescale = np.sqrt((planck_wmap_fdec[1])**2+(planck_wmap_fdec[2])**2)
+
+	hp.mollview(planck_wmap_pol_rescale,min=0,max=plotmax_p,cmap='jet',title='',unit='mK CMB')#,title='WMAP+Planck weighted polarised intensity'
 	plt.savefig(outdir+'fig3_wmap_planck.pdf')
 	plt.clf()
-	# Do differences here.
+	hp.mollview(planck_wmap_pol_rescale-planck_wmap_pol_2018_rescale,min=-plotmax_sub,max=plotmax_sub,cmap='jet',title='',unit='mK CMB')#,title='WMAP+Planck weighted polarised intensity'
+	plt.savefig(outdir+'fig3_wmap_planck_2020_2018.pdf')
+	plt.clf()
+	hp.mollview(planck_wmap_pol_2018_rescale-planck_wmap_pol_2015_rescale,min=-plotmax_sub,max=plotmax_sub,cmap='jet',title='',unit='mK CMB')#,title='WMAP+Planck weighted polarised intensity'
+	plt.savefig(outdir+'fig3_wmap_planck_2018_2015.pdf')
+	plt.clf()
+	hp.mollview(planck_wmap_pol_rescale-planck_wmap_pol_2015_rescale,min=-plotmax_sub,max=plotmax_sub,cmap='jet',title='',unit='mK CMB')#,title='WMAP+Planck weighted polarised intensity'
+	plt.savefig(outdir+'fig3_wmap_planck_2020_2015.pdf')
+	plt.clf()
 
 # for region in regions:
 # 	reso = 5.0
@@ -92,6 +126,7 @@ if 3 in dofigs:
 # 	plt.savefig(outdir+region[0]+'_mfipw.pdf')
 # exit()
 
+# Figures 1 and 4, MFI parts
 if 1 in dofigs or 4 in dofigs:
 	# Read in MFI
 	mfi311 = hp.read_map(basedir+mfi_maps[2],field=None)
@@ -110,13 +145,14 @@ if 1 in dofigs or 4 in dofigs:
 	# plt.savefig(outdir+'polfracmfi311.pdf')
 	# exit()
 	if 4 in dofigs:
-		mfi311_sub = mfi311_pol - planck_wmap_pol
+		mfi311_sub = mfi311_pol - planck_wmap_pol_fdec_rescale#planck_wmap_pol_rescale
 		mfi311_sub[mfi311[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi311_sub,min=-plotmax_sub,max=plotmax_sub,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 3 11GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated'
 		plt.savefig(outdir+'fig4_mfi311_subP.pdf')
 		plt.clf()
 
-		mfi311_sub = np.sqrt(((mfi311[1] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap[1])**2+((mfi311[2] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap[2])**2)
+		mfi311_sub = np.sqrt(((mfi311[1] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap_fdec[1])**2+((mfi311[2] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap_fdec[2])**2)
+		# mfi311_sub = np.sqrt(((mfi311[1] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+((mfi311[2] * (reffreq/mfi_freqs[2])**spectrum) - planck_wmap[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
 		mfi311_sub[mfi311[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi311_sub,min=0,max=plotmax,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 3 11GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated (Q-Q, U-U)'
 		plt.savefig(outdir+'fig4_mfi311_subP2.pdf')
@@ -138,12 +174,13 @@ if 1 in dofigs or 4 in dofigs:
 		plt.savefig(outdir+'fig1_mfi313_pol.pdf')
 		plt.clf()
 	if 4 in dofigs:
-		mfi313_sub = mfi313_pol - planck_wmap_pol
+		mfi313_sub = mfi313_pol - planck_wmap_pol_fdec_rescale#planck_wmap_pol_rescale
 		mfi313_sub[mfi313[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi313_sub,min=-plotmax_sub,max=plotmax_sub,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 3 13GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated'
 		plt.savefig(outdir+'fig4_mfi313_subP.pdf')
 		plt.clf()
-		mfi313_sub = np.sqrt(((mfi313[1] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap[1])**2+((mfi313[2] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap[2])**2)
+		mfi313_sub = np.sqrt(((mfi313[1] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap_fdec[1])**2+((mfi313[2] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap_fdec[2])**2)
+		# mfi313_sub = np.sqrt(((mfi313[1] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+((mfi313[2] * (reffreq/mfi_freqs[3])**spectrum) - planck_wmap[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
 		mfi313_sub[mfi313[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi313_sub,min=0,max=plotmax,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 3 13GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated (Q-Q, U-U)'
 		plt.savefig(outdir+'fig4_mfi313_subP2.pdf')
@@ -173,12 +210,13 @@ if 1 in dofigs or 4 in dofigs:
 		plt.savefig(outdir+'fig1_mfi417_pol.pdf')
 		plt.clf()
 	if 4 in dofigs:
-		mfi417_sub = mfi417_pol - planck_wmap_pol
+		mfi417_sub = mfi417_pol - planck_wmap_pol_fdec_rescale#planck_wmap_pol_rescale
 		mfi417_sub[mfi417[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi417_sub,min=-plotmax_sub,max=plotmax_sub,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 4 17GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated'
 		plt.savefig(outdir+'fig4_mfi417_subP.pdf')
 		plt.clf()
-		mfi417_sub = np.sqrt(((mfi417[1] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap[1])**2+((mfi417[2] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap[2])**2)
+		mfi417_sub = np.sqrt(((mfi417[1] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap_fdec[1])**2+((mfi417[2] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap_fdec[2])**2)
+		# mfi417_sub = np.sqrt(((mfi417[1] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+((mfi417[2] * (reffreq/mfi_freqs[4])**spectrum) - planck_wmap[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
 		mfi417_sub[mfi417[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi417_sub,min=0,max=plotmax,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 4 17GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated (Q-Q, U-U)'
 		plt.savefig(outdir+'fig4_mfi417_subP2.pdf')
@@ -193,19 +231,21 @@ if 1 in dofigs or 4 in dofigs:
 		plt.clf()
 		plt.close()
 	if 4 in dofigs:
-		mfi419_sub = mfi419_pol - planck_wmap_pol
+		mfi419_sub = mfi419_pol - planck_wmap_pol_fdec_rescale#planck_wmap_pol_rescale
 		mfi419_sub[mfi419[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi419_sub,min=-plotmax_sub,max=plotmax_sub,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 4 19GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated'
 		plt.savefig(outdir+'fig4_mfi419_subP.pdf')
 		plt.clf()
 		plt.close()
-		mfi419_sub = np.sqrt(((mfi419[1] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap[1])**2+((mfi419[2] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap[2])**2)
+		mfi419_sub = np.sqrt(((mfi419[1] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap_fdec[1])**2+((mfi419[2] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap_fdec[2])**2)
+		# mfi419_sub = np.sqrt(((mfi419[1] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap[1] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2+((mfi419[2] * (reffreq/mfi_freqs[5])**spectrum) - planck_wmap[2] * (reffreq/planck_wmap_weighted_reffreq)**spectrum)**2)
 		mfi419_sub[mfi419[1]==hp.UNSEEN] = hp.UNSEEN
 		hp.mollview(mfi419_sub,min=0,max=plotmax,cmap='jet',unit='mK CMB',title='')#,title='MFI horn 4 19GHz polarised intensity @ 10GHz - Planck+WMAP extrapolated (Q-Q, U-U)'
 		plt.savefig(outdir+'fig4_mfi419_subP2.pdf')
 		plt.clf()
 		plt.close()
 
+# Figure 5
 if 5 in dofigs:
 	# Weighted Planck+WMAP+MFI map
 	mfipw = hp.read_map(basedir+mfi_planck_weighted,field=None)
@@ -230,76 +270,4 @@ if 5 in dofigs:
 	plt.clf()
 
 
-
-
-exit()
-
-# C-BASS
-# cbass = hp.read_map(basedir+cbass_map,field=None)
-# cbass_pol = np.sqrt(cbass[1]**2+cbass[2]**2)*1e3
-# # cbass_pol[mfi_mask==0] = hp.UNSEEN
-# cbass_pol[cbass_pol>1e10] = hp.UNSEEN
-# hp.mollview(cbass_pol,min=0,max=plotmax*(4.76/mfi_freqs[2])**spectrum,cmap='jet',title='C-BASS polarised intensity',unit='mK CMB')
-# plt.savefig(outdir+'zz_cbass.pdf')
-# plt.clf()
-
-
-
-# # Read in the planck maps
-# planckq = hp.read_map(basedir+planck2018+'_q.fits')
-# planckqerr = hp.read_map(basedir+planck2018+'_q_unc.fits')
-# hp.mollview(planckqerr)
-# plt.savefig(outdir+'Q_err_planck.pdf')
-# plancku = hp.read_map(basedir+planck2018+'_u.fits')
-# planckuerr = hp.read_map(basedir+planck2018+'_u_unc.fits')
-# hp.mollview(np.sqrt(planckq**2+plancku**2),min=0,max=1.2)
-# plt.savefig(outdir+'P_planck.pdf')
-
-# # Read in the mfi maps
-# mfiq = hp.read_map(basedir+mfi+'_q.fits')
-# mfiq[mfiq == hp.UNSEEN] = 0.0
-# mfiqerr = hp.read_map(basedir+mfi+'_q_unc.fits')
-# mfiqerr[mfiqerr==0.0] = hp.UNSEEN
-# hp.mollview(mfiqerr,max=0.05)
-# plt.savefig(outdir+'Q_err_mfi.pdf')
-# mfiu = hp.read_map(basedir+mfi+'_u.fits')
-# mfiu[mfiu == hp.UNSEEN] = 0.0
-# mfiuerr = hp.read_map(basedir+mfi+'_u_unc.fits')
-# mfiuerr[mfiuerr==0.0] = hp.UNSEEN
-# hp.mollview(np.sqrt(mfiq**2+mfiu**2),min=0,max=1.2)
-# plt.savefig(outdir+'P_mfi.pdf')
-
-# # Do a quick combination of both
-# combq = ((planckq/planckqerr)+(mfiq/mfiqerr))/((1.0/planckqerr)+(1.0/mfiqerr))
-# combu = ((plancku/planckuerr)+(mfiu/mfiuerr))/((1.0/planckuerr)+(1.0/mfiuerr))
-# hp.write_map(outdir+'Q_comb.fits',combq,overwrite=True)
-# hp.write_map(outdir+'U_comb.fits',combu,overwrite=True)
-# hp.write_map(outdir+'P_comb.fits',np.sqrt(combq**2+combu**2),overwrite=True)
-# hp.mollview(np.sqrt(combq**2+combu**2),min=0,max=1.2)
-# plt.savefig(outdir+'P_comb.pdf')
-
-# # Also plot just WMAPK, Planck30 on their own
-# planck30map = hp.read_map(basedir+planck30, field=None)
-# planck30oldmap = hp.read_map(basedir+planck30old, field=None)
-# wmapkmap = hp.read_map(basedir+wmapk, field=None)
-
-# polmapplanck30 = np.sqrt(planck30map[1]**2+planck30map[2]**2)*(10.0/28.4)**(-3.0)
-# hp.mollview(polmapplanck30,min=0,max=1.2,title='Planck 30 2018 (rescaled to 10GHz)')
-# plt.savefig(outdir+'P_planck30.pdf')
-
-# polmapplanck30old = np.sqrt(planck30oldmap[1]**2+planck30oldmap[2]**2)*(10.0/28.4)**(-3.0)
-# hp.mollview(polmapplanck30old,min=0,max=1.2,title='Planck 30 2015 (rescaled to 10GHz)')
-# plt.savefig(outdir+'P_planck30old.pdf')
-
-# polmapwmapk = np.sqrt(wmapkmap[1]**2+wmapkmap[2]**2)*(10.0/22.8)**(-3.0)
-# hp.mollview(polmapwmapk,min=0,max=1.2,title='WMAPK (rescaled to 10GHz)')
-# plt.savefig(outdir+'P_wmapk.pdf')
-
-# hp.mollview(polmapplanck30-polmapwmapk,min=-0.5,max=0.5,title='Planck 30 2018 - WMAP K (rescaled to 10GHz)')
-# plt.savefig(outdir+'P_planck30_minus_wmapk.pdf')
-
-# hp.mollview(polmapplanck30old-polmapwmapk,min=-0.5,max=0.5,title='Planck 30 2015 - WMAP K (rescaled to 10GHz)')
-# plt.savefig(outdir+'P_planck30old_minus_wmapk.pdf')
-
-# hp.mollview(polmapplanck30-polmapplanck30old,min=-0.5,max=0.5,title='Planck 30 2018 - Planck 30 2015')
-# plt.savefig(outdir+'P_planck30_minus_planck30.pdf')
+# EOF

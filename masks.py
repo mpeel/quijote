@@ -1,0 +1,25 @@
+# Do quick plots of all of the masks to make them easy to look at
+from astrocode.astroutils import *
+
+basedir = '/Users/mpeel/Documents/maps/quijote_masks/'
+plotmap(basedir+'bob_CGS_msk.fits',basedir+'bob_CGS_msk.png')
+plotmap(basedir+'bob_Diffuse.fits',basedir+'bob_Diffuse.png')
+plotmap(basedir+'bob_IR_msk.fits',basedir+'bob_IR_msk.png')
+plotmap(basedir+'bob_LL_msk.fits',basedir+'bob_LL_msk.png')
+plotmap(basedir+'bob_mfi_commonmask.fits',basedir+'bob_mfi_commonmask.png')
+plotmap(basedir+'bob_mfi_NPS_mask_ns64.fits',basedir+'bob_mfi_NPS_mask_ns64.png')
+plotmap(basedir+'bob_mfi_NPS_mask_ns512.fits',basedir+'bob_mfi_NPS_mask_ns512.png')
+plotmap(basedir+'bob_R13_2reg_mfi_ns64.fits',basedir+'bob_R13_2reg_mfi_ns64.png')
+plotmap(basedir+'bob_R13_5reg_mfi_ns64.fits',basedir+'bob_R13_5reg_mfi_ns64.png')
+plotmap(basedir+'bob_R13_and_spur_ns64.fits',basedir+'bob_R13_and_spur_ns64.png')
+plotmap(basedir+'bob_R13like_ns64.fits',basedir+'bob_R13like_ns64.png')
+plotmap(basedir+'bob_Spur.fits',basedir+'bob_Spur.png')
+plotmap(basedir+'bob_UL_msk.fits',basedir+'bob_UL_msk.png')
+plotmap(basedir+'fan_mask_extended_final_nside64.fits',basedir+'fan_mask_extended_final_nside64.png')
+plotmap(basedir+'fan_mask_extended_final_nside512.fits',basedir+'fan_mask_extended_final_nside512.png')
+plotmap(basedir+'masc_polangle_1.fits',basedir+'masc_polangle_1.png')
+plotmap(basedir+'masc_polangle_2.fits',basedir+'masc_polangle_2.png')
+plotmap(basedir+'masc_polangle_3.fits',basedir+'masc_polangle_3.png')
+plotmap(basedir+'mask_quijote_ncp_lowdec_nside512.fits',basedir+'mask_quijote_ncp_lowdec_nside512.png')
+plotmap(basedir+'mask_quijote_ncp_satband_nside512.fits',basedir+'mask_quijote_ncp_satband_nside512.png')
+plotmap(basedir+'NPS_mask_ns256.fits',basedir+'NPS_mask_ns256.png')
