@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from astrocode.astroutils import *
 import matplotlib
 from configure import *
+from astrocode.polfunc import *
 
 # Location of data
 basedir = '/Users/mpeel/Documents/maps/'
@@ -28,7 +29,8 @@ planck_wmap_weighted_fdec = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted_fdec/wm
 
 ## MFI
 mfi_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/256_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_combine.fits'
-mfi_planck_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/256_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_wmapplanck_combine.fits'
+# mfi_planck_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted/256_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_wmapplanck_combine.fits'
+mfi_planck_weighted = 'quijote_202103_tqu_v1.5_noise_v1.0_weighted_fdec/512_60.0smoothed_quijotecombwei10_tqu_v1.5_noise_v1.0_-3.1_wmapplanck_qtmask_combine.fits'
 mfi_maps = ['quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI2_17.0_2021_mKCMBunits.fits',\
 'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI2_19.0_2021_mKCMBunits.fits',\
 'quijote_202103_tqu_v1.5_noise_v1.0_newwf/256_60.0smoothed_QUIJOTEMFI3_11.0_2021_mKCMBunits.fits',\
@@ -41,6 +43,7 @@ mfi_mask_filename = basedir+'quijote_masks/mask_quijote_ncp_satband_nside512.fit
 # Configuration
 mfi_freqs = [16.7, 18.7, 11.1, 12.9, 17, 19]
 plotmax_p = 1.5
+plotmax_qu = 1.0
 plotmax = 0.5
 plotmax_sub = 0.5
 spectrum = -3.0
@@ -55,8 +58,8 @@ dofigs = [1,2,3,4,5]
 regions = get_regions()
 
 # Read in the MFI mask
-mfi_mask = hp.read_map(mfi_mask_filename)
-mfi_mask = hp.ud_grade(mfi_mask,256)
+mfi_mask_512 = hp.read_map(mfi_mask_filename)
+mfi_mask = hp.ud_grade(mfi_mask_512,256)
 mfi_mask[mfi_mask != 1.0] = 0.0
 mfi_mask[:] = 1.0
 
@@ -85,6 +88,12 @@ if 2 in dofigs:
 	mfiw_pol[mfiw[1]==0] = hp.UNSEEN
 	hp.mollview(mfiw_pol,min=0,max=plotmax_p,cmap='jet',unit='mK CMB',title='')#,title='MFI weighted polarised intensity'
 	plt.savefig(outdir+'fig2_mfi_combine.pdf')
+	plt.clf()
+	plt.close()
+	mfiw_polang = calc_polang(mfiw[1],mfiw[2])
+	mfiw_polang[mfiw[1]==0] = hp.UNSEEN
+	hp.mollview(mfiw_polang,min=-90,max=90,cmap='hsv',unit='deg',title='')
+	plt.savefig(outdir+'fig2_mfi_combine_polang.pdf')
 	plt.clf()
 	plt.close()
 
@@ -250,24 +259,31 @@ if 5 in dofigs:
 	# Weighted Planck+WMAP+MFI map
 	mfipw = hp.read_map(basedir+mfi_planck_weighted,field=None)
 	mfipw_pol = np.sqrt(mfipw[1]**2+mfipw[2]**2)
-	mfipw_pol[mfi_mask==0] = hp.UNSEEN
-	hp.mollview(mfipw_pol,min=0,max=plotmax*(10.0/mfi_freqs[2])**spectrum,cmap='jet',unit='mK CMB',title='')#,title='MFI+WMAP+Planck weighted polarised intensity'
+	# mfipw_pol[mfi_mask_512==0] = hp.UNSEEN
+	hp.mollview(mfipw_pol,min=0,max=plotmax_p,cmap='jet',unit='mK CMB',title='')#,title='MFI+WMAP+Planck weighted polarised intensity'
 	plt.savefig(outdir+'fig5_wmap_planck_mfi.pdf')
 	plt.clf()
 	temp = mfipw[1]
-	temp[mfi_mask==0]=hp.UNSEEN
-	hp.mollview(temp,min=-plotmax*(10.0/mfi_freqs[2])**spectrum,max=plotmax*(10.0/mfi_freqs[2])**spectrum,cmap='RdYlBu_r',title='',unit='mK CMB')#,title='MFI+WMAP+Planck weighted polarised intensity'
+	# temp[mfi_mask_512==0]=hp.UNSEEN
+	hp.mollview(temp,min=-plotmax_qu,max=plotmax_qu,cmap='RdYlBu_r',title='',unit='mK CMB')#,title='MFI+WMAP+Planck weighted polarised intensity'
 	plt.savefig(outdir+'fig5_wmap_planck_mfi_Q.pdf')
 	plt.clf()
 	temp = mfipw[2]
-	temp[mfi_mask==0]=hp.UNSEEN
-	hp.mollview(temp,min=-plotmax*(10.0/mfi_freqs[2])**spectrum,max=plotmax*(10.0/mfi_freqs[2])**spectrum,cmap='RdYlBu_r',title='',unit='mK CMB')#,title='MFI+WMAP+Planck weighted polarised intensity'
+	# temp[mfi_mask_512==0]=hp.UNSEEN
+	hp.mollview(temp,min=-plotmax_qu,max=plotmax_qu,cmap='RdYlBu_r',title='',unit='mK CMB')#,title='MFI+WMAP+Planck weighted polarised intensity'
 	plt.savefig(outdir+'fig5_wmap_planck_mfi_U.pdf')
 	plt.clf()
 
-	hp.mollview(mfipw_pol,min=0,max=plotmax*(10.0/mfi_freqs[2])**spectrum,cmap='jet',unit='mK CMB',title='',xsize=1600)#,title='MFI+WMAP+Planck weighted polarised intensity'
+	hp.mollview(mfipw_pol,min=0,max=plotmax_p,cmap='jet',unit='mK CMB',title='',xsize=1600)#,title='MFI+WMAP+Planck weighted polarised intensity'
 	plt.savefig(outdir+'fig5_wmap_planck_mfi_large.pdf')
 	plt.clf()
+
+	mfiw_polang = calc_polang(mfipw[1],mfipw[2])
+	mfiw_polang[mfipw[1]==0] = hp.UNSEEN
+	hp.mollview(mfiw_polang,min=-90,max=90,cmap='hsv',unit='deg',title='')
+	plt.savefig(outdir+'fig5_wmap_planck_mfi_combine_polang.pdf')
+	plt.clf()
+	plt.close()
 
 
 # EOF
