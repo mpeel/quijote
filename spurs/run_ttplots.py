@@ -110,7 +110,7 @@ def run_plots(mask,mfi311,p30,wk9,outdir,name=''):
 	# print(np.shape(p30[4:]))
 	# print(np.shape(temp))
 	# exit()
-	beta_w, sigma_beta, sigma_beta2, sigma_beta3, q, sigmaq, chi = p_fusk14_cc(mask, mfi311, mfi311[4:], 11.1, 'Q11', False, wk9, temp, 22.8, 'WK', False, 0.0, outdir, name+"_wmap")
+	beta_w, sigma_beta, sigma_beta2, sigma_beta3, q, sigmaq, chi = p_fusk14_cc(mask, mfi311, np.array([mfi311[3],mfi311[4],mfi311[6]]), 11.1, 'Q11', False, wk9, temp, 22.8, 'WK', False, 0.0, outdir, name+"_wmap")
 # def p_fusk14_cc(mask_in, map1, var_map1, freq1, str_freq1, detector1, map2, var_map2, freq2, str_freq2, detector2, nsigma, path_out, label):
 
 	beta = -3.1
