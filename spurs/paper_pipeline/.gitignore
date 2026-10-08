@@ -1,0 +1,4 @@
+products/
+figures/
+__pycache__/
+*.pyc
